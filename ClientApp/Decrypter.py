@@ -1,3 +1,6 @@
+import os, random, struct
+from Crypto.Cipher import AES
+
 def decrypt_file(key, in_filename, out_filename=None, chunksize=24*1024):
     """ Decrypts a file using AES (CBC mode) with the
         given key. Parameters are similar to encrypt_file,
