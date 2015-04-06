@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     url(r'^reporterhome', 'SecureWitness.views.reporter', name='Home'),
     url(r'^adminhome', 'SecureWitness.views.adm', name='Home'),
     url(r'^readerhome', 'SecureWitness.views.reader', name='Home'),
+    url(r'^loginpage', 'SecureWitness.views.login', name='Login' )
 )
