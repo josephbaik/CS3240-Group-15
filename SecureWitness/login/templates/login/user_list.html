@@ -1,0 +1,40 @@
+<style type="text/css">
+form {
+    width: 300px;
+    margin: 0 auto;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+p
+{
+text-align: center;
+}
+</style>
+
+
+
+<h1>Users</h1>
+
+
+{% block content %}
+
+    <form action="demo_form.asp">
+Username: <input type="text" name="Username" ><br>
+Password: <input type="password" name="Password" ><br>
+<button type="button" onclick="alert('Hello world!')">Login</button>
+</form>
+
+
+<ul>
+  {% for user in object_list %}
+<li><a href="{{ user.get_absolute_url }}">{{ user }}</a>
+	(<a href="{% url "user-edit" pk=user.id %}">edit</a>)</li>
+  {% endfor %}
+
+</ul>
+
+<a href="{% url "user-new" %}">Register</a>
+
+{% endblock %}
