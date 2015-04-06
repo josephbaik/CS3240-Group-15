@@ -1,0 +1,5 @@
+from Encrypter import encrypt_file
+from Encrypter import decrypt_file
+
+encrypt_file("1e744106e413d15db387a9b621c7cf92", "test.txt", "out.txt")
+decrypt_file("1e744106e413d15db387a9b621c7cf92", "out.txt", "newtest.txt")
