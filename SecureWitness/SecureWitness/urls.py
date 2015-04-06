@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^reporterhome', 'SecureWitness.views.reporter', name='Home'),
     url(r'^adminhome', 'SecureWitness.views.adm', name='Home'),
     url(r'^readerhome', 'SecureWitness.views.reader', name='Home'),
+<<<<<<< HEAD
     url(r'^$', login.views.ListUserView.as_view(), name='user-list'),
     url(r'^new$', login.views.CreateUserView.as_view(), name='user-new',),
     url(r'^edit/(?P<pk>\d+)/$', login.views.UpdateUserView.as_view(), name='user-edit',),
@@ -21,3 +22,7 @@ urlpatterns = patterns('',
    )
 
 
+=======
+    url(r'^loginpage', 'SecureWitness.views.login', name='Login' )
+)
+>>>>>>> ca64e473c28af692262e041b7ff224207e7f6e81

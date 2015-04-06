@@ -91,4 +91,11 @@ STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
+<<<<<<< HEAD
    )
+=======
+)
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
+UPLOAD_PATH = MEDIA_ROOT
+>>>>>>> ca64e473c28af692262e041b7ff224207e7f6e81
