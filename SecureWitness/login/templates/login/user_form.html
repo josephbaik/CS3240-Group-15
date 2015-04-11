@@ -1,0 +1,22 @@
+{% if user.id %}
+<h1>Edit User</h1>
+{% else %}
+<h1>Register</h1>
+{% endif %}
+
+<form action="{{ action }}" method="POST">
+
+
+  {% csrf_token %}
+  <ul>
+    {{ form.as_ul }}
+  </ul>
+  <input id="save_user" type="submit" value="Save" />
+</form>
+
+
+
+
+
+
+<a href="{% url "user-list" %}">back to list</a>

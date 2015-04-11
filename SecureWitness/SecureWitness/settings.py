@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -36,8 +37,14 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
     'SecWit',
 )
+=======
+    'login',
+    
+   )
+>>>>>>> 32e2a46919f994e439afb95284fc4e00de45be48
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -47,7 +54,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+   )
 
 ROOT_URLCONF = 'SecureWitness.urls'
 
@@ -56,13 +63,17 @@ WSGI_APPLICATION = 'SecureWitness.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -85,7 +96,14 @@ STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
+<<<<<<< HEAD
+   )
+=======
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
 UPLOAD_PATH = MEDIA_ROOT
+<<<<<<< HEAD
+=======
+>>>>>>> ca64e473c28af692262e041b7ff224207e7f6e81
+>>>>>>> 32e2a46919f994e439afb95284fc4e00de45be48
