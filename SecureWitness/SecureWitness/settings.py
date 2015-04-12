@@ -37,9 +37,14 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
+    'SecWit',
+)
+=======
     'login',
     
    )
+>>>>>>> 32e2a46919f994e439afb95284fc4e00de45be48
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -98,4 +103,7 @@ TEMPLATE_DIRS = (
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
 UPLOAD_PATH = MEDIA_ROOT
+<<<<<<< HEAD
+=======
 >>>>>>> ca64e473c28af692262e041b7ff224207e7f6e81
+>>>>>>> 32e2a46919f994e439afb95284fc4e00de45be48
