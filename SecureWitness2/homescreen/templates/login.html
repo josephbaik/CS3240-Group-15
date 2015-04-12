@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>LOGIN</h1>
+<form action="/my_view/" method="post">{% csrf_token %}
+Username: <input type="text" name="username" ><br>
+Password: <input type="password" name="password"><br>
+<input type="submit" value="Submit">
+</form>
+
+<a href="{% url "register" %}">Register</a>
+
+</body>
+</html>
