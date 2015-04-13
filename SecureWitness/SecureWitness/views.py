@@ -31,7 +31,7 @@ def reporter(request):
             dest.write(chunk)
         dest.close()
 
-        page = Page(title=request.TEXT, url=upload.name)
+        page = Page(title=request.POST['title'], url=upload.name)
 
         encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(settings.MEDIA_ROOT, upload.name+".raw"), os.path.join(settings.MEDIA_ROOT, upload.name))
 

@@ -1,0 +1,111 @@
+import math
+class point:
+	x = 0
+	y = 0
+	category = 0
+	cat1count = 0
+	cat2count = 0
+	distancefrom = 0
+	def tostring(self):
+		return str(self.x) + ', ' + str(self.y)
+	def distance(self, p):
+		return math.sqrt((self.x - p.x)** 2 + (self.y - p.y)** 2)
+	def sortByDistance(self, lst):
+		for  x in lst:
+			x.distancefrom = self.distance(x)
+		lst.sort(key = lambda x: x.distancefrom, reverse = False)
+
+key = input('Enter a value k: ')
+M = input('Enter number of values M: ')
+name = raw_input('Enter a data file name: ')
+print 'reading from ' + name + '... \n'
+
+f = open(name, 'r')
+
+count = 0
+points = []
+categ1 = ""
+categ2 = ""
+categ1 = f.readline().split()[0]
+for line in f:
+	if line.split()[0] != categ1:
+		categ2 = line.split()[0]
+		break
+g = open(name, 'r')
+for line in g:
+	if(count < M):
+		if categ1 in line:
+			p = point()
+			p.x = float(line.split()[1])
+			p.y = float(line.split()[2])
+			p.category = 1
+			points.append(p)
+		if categ2 in line:
+			p = point()
+			p.x = float(line.split()[1])
+			p.y = float(line.split()[2])
+			p.category = 2
+			points.append(p)
+	count = count + 1
+
+# for p in points:
+# 	print 'category ' + str(p.category) + ': '+ p.tostring()
+
+inputs = []
+
+while True:
+	s = raw_input('Enter an ordered pair: ')
+	p = point()
+	p.x = float(s.split()[0])
+	p.y = float(s.split()[1])
+	if(p.x == 1 and p.y == 1):
+		break
+	inputs.append(p)
+
+outputs = []
+opPoints = []
+zcount = 0
+cat1Avg = 0
+cat2Avg = 0
+cat1Count = 0
+cat2Count = 0
+for z in inputs:
+	z.sortByDistance(points)
+	# opstring = []
+	# temp = []
+	# temp.append('input point: ' +  z.tostring())
+	# outputs.append(temp)
+	zcount = 0
+	for p in range(0, key):
+		if(points[p].category == 1):
+			outputs.append('	cat1 ' + points[p].tostring() + ' ' + str(z.distance(points[p])))
+			print '	cat1 ' + points[zcount].tostring() + ' ' + str(z.distance(points[zcount]))
+			z.cat1count = z.cat1count + 1
+			cat1Count += 1
+			cat1Avg += z.distance(points[p])
+			# print 'cat1 count: ' + str(z.cat1count)
+		if points[p].category == 2:
+			outputs.append('	cat2 ' + points[p].tostring() + ' ' + str(z.distance(points[p])))
+			z.cat2count = z.cat2count + 1
+			cat2Count += 1
+			cat2Avg += z.distance(points[p])
+			# print 'cat2 count: ' + str(z.cat2count)
+			print '	cat2 ' + points[zcount].tostring() + ' ' + str(z.distance(points[zcount]))
+		zcount = zcount + 1
+	# outputs.append(opstring)
+	if z.cat1count >= z.cat2count:
+		print ('input point: (' +  z.tostring() + ') assigned to category 1')
+	if z.cat1count < z.cat2count:
+		print ('input point: (' +  z.tostring() + ') assigned to category 2')
+
+print ('Average distance to category 1 items: ' + str(cat1Avg/cat1Count))
+print ('Average distance to category 2 items: ' + str(cat2Avg/cat2Count))
+
+# Count = 0
+# for o in opPoints:
+# 	# for j in range(0, key+1):
+# 	# 	if j == 0:
+# 	# 		print o
+# 	# 	else:
+# 	# 		print outputs[j-1]
+# 	print o
