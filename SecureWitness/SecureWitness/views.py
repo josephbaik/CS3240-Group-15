@@ -6,6 +6,8 @@ from django.core.files import File
 from django.shortcuts import render_to_response
 from django.conf import settings
 
+from Encrypter import encrypt_file
+
 from datetime import date
 import os
 
@@ -23,10 +25,14 @@ def reporter(request):
 
         while os.path.exists(os.path.join(upload_full_path, upload.name)):
             upload.name = '_' + upload.name
-        dest = open(os.path.join(settings.MEDIA_ROOT, upload.name), 'wb+')
+        dest = open(os.path.join(settings.MEDIA_ROOT, upload.name+".raw"), 'wb+')
         for chunk in upload.chunks():
             dest.write(chunk)
         dest.close()
+
+        encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(settings.MEDIA_ROOT, upload.name+".raw"), os.path.join(settings.MEDIA_ROOT, upload.name))
+
+        os.remove(os.path.join(settings.MEDIA_ROOT, upload.name+".raw"))
 
         return render(request, 'ReporterHomePage.html')
     else:
