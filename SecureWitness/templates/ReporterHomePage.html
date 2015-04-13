@@ -44,6 +44,27 @@
 </div>
 
 <div if="section">
+<p>
+Title:
+<form method="post">
+<input type="text"  />
+</form>
+</p>
+
+<p>
+Short Description:
+<form method="post">
+<textarea name="shortdescription" cols="40" rows="1" ... ></textarea>
+</form>
+</p>
+
+<p>
+Long Description:
+<form method="post">
+<textarea name="longdescription" cols="40" rows="5" ... ></textarea>
+</form>
+</p>
+
 <form method="post" enctype="multipart/form-data">{% csrf_token %}
     <input type="file" name="myfile" />
     <input type="submit" name="submit" value="Upload" />
