@@ -6,7 +6,8 @@ from django.core.files import File
 from django.shortcuts import render_to_response
 from django.conf import settings
 
-from Encrypter import encrypt_file
+from SecureWitness.Encrypter import encrypt_file
+from SecureWitness.models import Page
 
 from datetime import date
 import os
@@ -29,6 +30,8 @@ def reporter(request):
         for chunk in upload.chunks():
             dest.write(chunk)
         dest.close()
+
+        page = Page(title=request.TEXT, url=upload.name)
 
         encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(settings.MEDIA_ROOT, upload.name+".raw"), os.path.join(settings.MEDIA_ROOT, upload.name))
 
