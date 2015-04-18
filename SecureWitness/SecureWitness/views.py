@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 from django.conf import settings
 
 from SecureWitness.Encrypter import encrypt_file
-from SecureWitness.models import Page
+from SecWit.models import Page
 
 from datetime import date
 import os
@@ -32,6 +32,7 @@ def reporter(request):
         dest.close()
 
         page = Page(title=request.POST['title'], url=upload.name)
+        page.save()
 
         encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(settings.MEDIA_ROOT, upload.name+".raw"), os.path.join(settings.MEDIA_ROOT, upload.name))
 
