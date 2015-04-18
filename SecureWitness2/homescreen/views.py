@@ -14,7 +14,7 @@ def my_view(request):
    if user is not None:
       if user.is_active:
          login(request, user)
-         return render(request, 'ReaderHomepage.html')
+         return render(request, 'ReaderHomepage.html', {'firstname': request.user.username})
          
       else:
          print("user is disabled")
