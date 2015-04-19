@@ -39,10 +39,18 @@
 </div>
 
 <div id="nav">
+<form action="ReaderHomepage.html">
 <button type="Home">Home</button>
-<button type="Admin">Bulletin1</button>
-<button type="Reporter">Bulletin2</button>
-<button type="Reader">Bulletin3</button>
+</form>
+<form action="{% url "adminHome" %}">
+<button type="Admin">Manage Groups</button>
+</form>
+<form action="{% url "reporterHome" %}">
+<button type="Reporter">Add Files</button>
+</form>
+<form action="{% url "Home" %}">
+<button type="Reader">Read Files</button>
+</form>
 </div>
 
 <div id="section">
@@ -53,6 +61,10 @@ Readers can download reports to read articles in which the access is granted to 
 <p>
 Admin can give other users administrative privileges or access to private lists of reports. Admin cannot, however, view a reporter's private reports
 </p>
+</br>
+</br>
+<a href = "{% url "logout" %}">Log Out</a>
+
 </div>
 
 <div id="footer">

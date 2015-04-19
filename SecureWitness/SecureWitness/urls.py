@@ -11,11 +11,12 @@ urlpatterns = patterns('',
     
     url(r'^$', 'SecureWitness.views.firstscreen', name='homepage',),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^reporterhome', 'SecureWitness.views.reporter', name='Home'),
-    url(r'^adminhome', 'SecureWitness.views.adm', name='Home'),
+    url(r'^reporterhome', 'SecureWitness.views.reporter', name='reporterHome'),
+    url(r'^adminhome', 'SecureWitness.views.adm', name='adminHome'),
     url(r'^readerhome', 'SecureWitness.views.reader', name='Home'),
     url(r'^my_view/?$', 'SecureWitness.views.my_view', name='login-view',),
     url(r'^register/?$', 'SecureWitness.views.register', name='register',),
     url(r'^addUser/?$', 'SecureWitness.views.addUser', name='addUser',),
-
+    url(r'^logout/?$', 'SecureWitness.views.logout_view', name = 'logout',),
+   
 )

@@ -5,11 +5,11 @@ from django.http import HttpResponseRedirect
 from django.core.files import File
 from django.shortcuts import render_to_response
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User, Permission
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.contenttypes.models import ContentType
 
 from SecureWitness.Encrypter import encrypt_file
-from SecWit.models import Page
 
 from datetime import date
 import os
@@ -30,12 +30,21 @@ def addUser(request):
    
    if(password == confirmpassword):
       user = User.objects.create_user(username, email, password)
+      
+      
+      permission1 = Permission.objects.get(codename='add_page')
+      #permission2 = Permission.objects.get(codename='read_page')
+      user.user_permissions.add(permission1)
+      user.user_permissions.add(2)
+
       return render(request, 'usercreated.html')
    else:
       raise ValidationError(password)
       return render(request, 'register.html')
 
 def reporter(request):
+    if request.user.has_perm('SecWit.add_page') is not True:
+        return render(request, 'invalidpermission.html')
     if request.method == 'POST':
         upload_dir = date.today().strftime(settings.UPLOAD_PATH)
         upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
@@ -62,8 +71,12 @@ def reporter(request):
     else:
         return render(request, 'ReporterHomePage.html')
 def adm(request):
-    return render(request, 'AdminHomePage.html')
+    if request.user.has_perm('SecWit.manage_group'):
+      return render(request, 'AdminHomePage.html')
+    return render(request, 'invalidpermission.html')  
 def reader(request):
+    if request.user.has_perm('SecWit.add_page') is not True:
+      return render(request, 'invalidpermission.html')
     return render(request, 'ReaderHomepage.html')
 
 def my_view(request):
@@ -79,3 +92,7 @@ def my_view(request):
          print("user is disabled")
          return render(request, 'InvalidLogin.html')
 
+def logout_view(request):
+   logout(request)
+   return render(request, 'login.html')
+   
