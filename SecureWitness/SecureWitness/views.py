@@ -12,6 +12,7 @@ from django.contrib.contenttypes.models import ContentType
 from SecureWitness.Encrypter import encrypt_file
 
 from datetime import date
+from reportUpload.models import Report
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -60,8 +61,8 @@ def reporter(request):
             dest.write(chunk)
         dest.close()
 
-        page = Page(title=request.POST['title'], url=upload.name)
-        page.save()
+        report = Report(title=request.POST['title'], author='bruh', date=str(date.today()), url=dest, short=request.POST['shortdescription'], longd=request.POST['longdescription'])
+        report.save()
 
         encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(settings.MEDIA_ROOT, upload.name+".raw"), os.path.join(settings.MEDIA_ROOT, upload.name))
 
@@ -77,6 +78,7 @@ def adm(request):
 def reader(request):
     if request.user.has_perm('SecWit.add_page') is not True:
       return render(request, 'invalidpermission.html')
+    reports = Report.objects.all()
     return render(request, 'ReaderHomepage.html')
 
 def my_view(request):
