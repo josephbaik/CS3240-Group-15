@@ -49,14 +49,17 @@
 <form method="post" enctype="multipart/form-data">{% csrf_token %}
     <p>
     Title:
-    <input type="text" name="title"/>
-    </p>
-    <p>
-    Short Description:
+    <input type="text" name="title"/><br>
+        <input type="checkbox" name="date">include date<br>
+         <input type="checkbox" name="time" />include time<br>
+
+         Location: <input type="text" name="location"/><br>
+    Short Description:<br>
     <textarea name="shortdescription" cols="40" rows="1" ... ></textarea>
-    </p>
-    <p>
-    Long Description:
+    <br>
+
+    Long Description: <br>
+
     <textarea name="longdescription" cols="40" rows="5" ... ></textarea>
     </p>
     
