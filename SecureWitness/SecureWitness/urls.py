@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^register/?$', 'SecureWitness.views.register', name='register',),
     url(r'^addUser/?$', 'SecureWitness.views.addUser', name='addUser',),
     url(r'^logout/?$', 'SecureWitness.views.logout_view', name = 'logout',),
-    url(r'^requestforms/?$', 'SecureWitness.views.requestforms', name = 'requestforms',),
-   
+    url(r'^requestgroups/?$', 'SecureWitness.views.requestgroups', name = 'requestgroups',),
+    url(r'^requestlogin/?$', 'SecureWitness.views.login_user', name = 'requestlogin',),
+
 )

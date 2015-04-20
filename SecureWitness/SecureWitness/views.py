@@ -3,11 +3,13 @@ __author__ = 'josephbaik'
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.files import File
+from django.http import JsonResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
 from django.contrib.auth.models import User, Permission
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.contenttypes.models import ContentType
+from django.views.decorators.http import require_http_methods
 
 from SecureWitness.Encrypter import encrypt_file
 
@@ -98,3 +100,24 @@ def logout_view(request):
    logout(request)
    return render(request, 'login.html')
    
+@require_http_methods(["POST"])
+def login_user(request):
+   print("You aren't dumb.")
+   user = authenticate(username=request.POST['username'], password=request.POST['password'])
+   login(request, user)
+   return HttpResponse("Logged In")
+
+def requestgroups(request):
+   list = {'groups' : []}
+   print(request.user.username)
+   if request.user is not None:
+      print("Your user is not none.")
+      if request.user.is_authenticated():
+         print("You have a name")
+      else:
+         print("You are anonymous")
+   else:
+      print("Your user name is none.")
+   for g in request.user.groups.all():
+      list['groups'].append(g.name)
+   return JsonResponse(list)

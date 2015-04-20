@@ -1,5 +1,6 @@
 import os, random, struct
 from Crypto.Cipher import AES
+from Crypto.Hash import SHA256
 
 def decrypt_file(key, in_filename, out_filename=None, chunksize=24*1024):
     """ Decrypts a file using AES (CBC mode) with the
@@ -9,6 +10,7 @@ def decrypt_file(key, in_filename, out_filename=None, chunksize=24*1024):
         (i.e. if in_filename is 'aaa.zip.enc' then
         out_filename will be 'aaa.zip')
     """
+    key = SHA256.new(unicode(key)).hexdigest()
     if not out_filename:
         out_filename = os.path.splitext(in_filename)[0]
 
