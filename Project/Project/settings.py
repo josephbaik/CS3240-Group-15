@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'reportUpload',
+    'SecureWitness',
    )
 
 MIDDLEWARE_CLASSES = (
@@ -50,9 +50,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
    )
 
-ROOT_URLCONF = 'SecureWitness.urls'
+ROOT_URLCONF = 'Project.urls'
 
-WSGI_APPLICATION = 'SecureWitness.wsgi.application'
+WSGI_APPLICATION = 'Project.wsgi.application'
 
 
 # Database

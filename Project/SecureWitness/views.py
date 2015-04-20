@@ -5,14 +5,18 @@ from django.http import HttpResponseRedirect
 from django.core.files import File
 from django.shortcuts import render_to_response
 from django.conf import settings
-from django.contrib.auth.models import User, Permission
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.core.urlresolvers import reverse
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from SecureWitness import forms
 
 from SecureWitness.Encrypter import encrypt_file
 
+from SecureWitness.models import Page, User
+from SecureWitness.forms import UserForm
+
 from datetime import date
-from reportUpload.models import Report
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -31,21 +35,12 @@ def addUser(request):
    
    if(password == confirmpassword):
       user = User.objects.create_user(username, email, password)
-      
-      
-      permission1 = Permission.objects.get(codename='add_page')
-      #permission2 = Permission.objects.get(codename='read_page')
-      user.user_permissions.add(permission1)
-      user.user_permissions.add(2)
-
       return render(request, 'usercreated.html')
    else:
       raise ValidationError(password)
       return render(request, 'register.html')
 
 def reporter(request):
-    if request.user.has_perm('SecWit.add_page') is not True:
-        return render(request, 'invalidpermission.html')
     if request.method == 'POST':
         upload_dir = date.today().strftime(settings.UPLOAD_PATH)
         upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
@@ -61,8 +56,8 @@ def reporter(request):
             dest.write(chunk)
         dest.close()
 
-        report = Report(title=request.POST['title'], author='bruh', date=str(date.today()), url=dest)
-        report.save()
+        page = Page(title=request.POST['title'], url=upload.name)
+        page.save()
 
         encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(settings.MEDIA_ROOT, upload.name+".raw"), os.path.join(settings.MEDIA_ROOT, upload.name))
 
@@ -72,13 +67,8 @@ def reporter(request):
     else:
         return render(request, 'ReporterHomePage.html')
 def adm(request):
-    if request.user.has_perm('SecWit.manage_group'):
-      return render(request, 'AdminHomePage.html')
-    return render(request, 'invalidpermission.html')  
+    return render(request, 'AdminHomePage.html')
 def reader(request):
-    if request.user.has_perm('SecWit.add_page') is not True:
-      return render(request, 'invalidpermission.html')
-
     return render(request, 'ReaderHomepage.html')
 
 def my_view(request):
@@ -90,11 +80,61 @@ def my_view(request):
          login(request, user)
          return render(request, 'ReaderHomepage.html', {'firstname': request.user.username})
          
-      else:
-         print("user is disabled")
-         return render(request, 'InvalidLogin.html')
+   else:
+        print("user is disabled")
+        return render(request, 'InvalidLogin.html')
 
-def logout_view(request):
-   logout(request)
-   return render(request, 'login.html')
+
+class ListUserView(ListView):
+
+   model = User
+
+
+class CreateUserView(CreateView):
+
+   model = User
+   #template_name = 'edit_user.html'
+   form_class = forms.UserForm
    
+   
+   def get_success_url(self):
+      return reverse('user-list')
+      
+   def get_context_data(self, **kwargs):
+      
+      context = super(CreateUserView, self).get_context_data(**kwargs)
+      context['action'] = reverse('user-new')
+      
+      return context
+      
+      
+      
+class UpdateUserView(UpdateView):
+
+   model = User
+   #template_name = 'edit_user.html'
+   form_class = forms.UserForm
+   def get_success_url(self):
+      return reverse('user-list')
+      
+      
+   def get_context_data(self, **kwargs):
+   
+      context = super(UpdateUserView, self).get_context_data(**kwargs)
+      context['action'] = reverse('user-edit', kwargs={'pk': self.get_object().id})
+      
+      return context
+      
+      
+class DeleteUserView(DeleteView):
+
+   model = User
+   #template_name = 'delete_user.html'
+   
+   def get_success_url(self):
+      return reverse('user-list')
+      
+      
+class UserView(DetailView):
+   model = User
+

@@ -1,0 +1,89 @@
+class OurSet:
+	"""
+	Class OurSet is a set that uses python's standard list as its base structure
+	@author Joseph Baik
+	Functions include:
+		__init__(self)
+		add(self, item)
+		addList(selfm l1)
+		__str__(self)
+		__len__(self)
+		__iter__(self)
+		union(self, set2)
+		intersection(self, set2)
+	"""
+	def __init__(self):
+		"""initializes OurSet object with its list"""
+		self.lst = []
+	def add(self, item):
+		"""adds an item to the set if there are none equal to the item in the set"""
+		for e in self.lst:
+			if(e == item):
+				return False
+		self.lst.append(item)
+		return True
+	def addList(self, l1):
+		"""adds the items of list l1 to the set if there are none equal to the items in the set"""
+		for one in l1:
+			for two in self.lst:
+				if one == two:
+					try:
+						self.lst.remove(two)
+					except ValueError:
+						z = 0
+			self.lst.append(one)
+	def __str__(self):
+		"""returns a printable string value of the set"""
+		answer = str(self.lst)
+		answer = answer[1:-1]
+		return '<' + answer + '>'
+
+	def __len__(self):
+		"""returns the number of elements in the set"""
+		return len(self.lst)
+
+	def __iter__(self):
+		"""returns the iterator of the set"""
+		return iter(self.lst)
+
+	def union(self, set2):
+		"""returns a set containing all the items in self and set2"""
+		temp = OurSet()
+		for one in self.lst:
+			temp.add(one)
+		for one in set2.lst:
+			temp.add(one)
+		return temp
+
+	def intersection(self, set2):
+		"""returns a set containing only items in both self and set2"""
+		set1 = self.lst
+		temp = set2.lst
+		answer = OurSet()
+		anslist = []
+		for one in set1:
+			for two in temp:
+				if one == two:
+					try:
+						anslist.remove(one)
+					except ValueError:
+						z = 0
+					anslist.append(one)
+		for one in anslist:
+			answer.add(one)
+		return answer
+
+
+# x = OurSet()
+# x.add(5)
+# lst = [5, 6, 7, 8, 9]
+# lst1 = [3, 4, 5, 6, 7]
+# y = OurSet()
+# y.addList(lst1)
+# x.addList(lst)
+# print x.lst
+# print str(x)
+# print str(x.union(y))
+# print str(x.intersection(y))
+# print x.__doc__
+# print x.intersection.__doc__
