@@ -14,6 +14,7 @@ from django.views.decorators.http import require_http_methods
 from SecureWitness.Encrypter import encrypt_file
 
 from datetime import date
+import time
 from reportUpload.models import Report
 import os
 
@@ -63,7 +64,22 @@ def reporter(request):
             dest.write(chunk)
         dest.close()
 
-        report = Report(title=request.POST['title'], author='bruh', date=str(date.today()), url=dest, short=request.POST['shortdescription'], longd=request.POST['longdescription'])
+        reportdest = os.path.join(settings.MEDIA_ROOT, upload.name+".raw")
+        incdate = request.POST.get('date', False)
+        inctime = request.POST.get('time', False)
+        loc = request.POST.get('location', 'none')
+
+        timestamp = time.ctime()
+
+        if incdate and not inctime:
+          report = Report(title=request.POST['title'], author='bruh', date=str(date.today()), url=reportdest, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+        if incdate and inctime:
+          report = Report(title=request.POST['title'], author='bruh', date=str(date.today()), time=timestamp, url=reportdest, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+        if not incdate and inctime:
+          report = Report(title=request.POST['title'], author='bruh', time=str(timestamp), url=reportdest, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+        if not incdate and not inctime:
+          report = Report(title=request.POST['title'], author='bruh', url=reportdest, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+
         report.save()
 
         encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(settings.MEDIA_ROOT, upload.name+".raw"), os.path.join(settings.MEDIA_ROOT, upload.name))
