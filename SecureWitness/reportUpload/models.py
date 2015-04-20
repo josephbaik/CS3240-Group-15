@@ -6,6 +6,8 @@ class Report(models.Model):
 	author = models.CharField(max_length=128)
 	date = models.CharField(max_length=128)
 	url = models.URLField(default='bruh')
+	short = models.TextField(default='none')
+	longd = models.TextField(default='none')
 
 	def __str__(self):
 		return self.title
