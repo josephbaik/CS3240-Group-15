@@ -15,12 +15,12 @@ class Migration(migrations.Migration):
             model_name='report',
             name='time',
             field=models.CharField(default='none', max_length=128),
-            preserve_default=True,
+            #preserve_default=True,
         ),
         migrations.AlterField(
             model_name='report',
             name='date',
             field=models.CharField(default='none', max_length=128),
-            preserve_default=True,
+            #preserve_default=True,
         ),
     ]
