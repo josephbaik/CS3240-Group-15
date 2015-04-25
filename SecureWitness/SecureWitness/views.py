@@ -98,16 +98,18 @@ def reader(request):
     if request.user.has_perm('SecWit.add_page') is not True:
       return render(request, 'invalidpermission.html')
     reports = Report.objects.all()
-    return render(request, 'ReaderHomepage.html')
+    return render(request, 'ReaderHomepage.html', {'reports': reports})
 
 def my_view(request):
    username = request.POST.get('username')
    password = request.POST.get('password')
+  
    user = authenticate(username = username, password = password)
    if user is not None:
       if user.is_active:
          login(request, user)
-         return render(request, 'ReaderHomepage.html', {'firstname': request.user.username})
+         reports = Report.objects.all()
+         return render(request, 'ReaderHomepage.html', {'firstname': request.user.username, 'reports': reports})
          
       else:
          print("user is disabled")

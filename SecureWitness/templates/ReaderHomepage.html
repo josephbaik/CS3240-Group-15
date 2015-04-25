@@ -51,16 +51,29 @@
 <form action="{% url "Home" %}">
 <button type="Reader">Read Files</button>
 </form>
+
 </div>
 
 <div id="section">
 <h2>Welcome to SecureWitness {{firstname}}!</h2>
+<form class="form-inline" id="user_form" method="post">
+     {% csrf_token %}
+     <!-- Display the search form elements here -->
+     <input class="form-control" type="text" size="50" name="query" value="{{query}}" id="query" />
+     <input class="btn btn-primary" type="submit" name="submit" value="Search" />
+</form>
 <p>
-Readers can download reports to read articles in which the access is granted to using their given key.
+
+{% for r_field in reports %}
+<a href = {{r.field.url}} download>
+<table>
+<!-- <tr><th>Header</th></tr> -->
+    <tr><td>{{r_field.title}}</td></tr>
+</table></a>
+{% endfor %}
+
 </p>
-<p>
-Admin can give other users administrative privileges or access to private lists of reports. Admin cannot, however, view a reporter's private reports
-</p>
+
 </br>
 </br>
 <a href = "{% url "logout" %}">Log Out</a>
