@@ -30,10 +30,10 @@ def reporter(request):
         return render(request, 'invalidpermission.html')
     if request.method == 'POST':
         if request.method == 'POST':
-        author = str(request.user.username)
-        folder = request.POST.get('folder', '')
-        upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-        upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
+         author = str(request.user.username)
+         folder = request.POST.get('folder', '')
+         upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
+         upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
 
         if not os.path.exists(upload_full_path):
             os.makedirs(upload_full_path)
@@ -137,11 +137,10 @@ def my_view(request):
          print("user is disabled")
          return render(request, 'InvalidLogin.html')
 
-<<<<<<< HEAD
-=======
+
 def Reportview(request):
   return render(request, 'ReportView.html')
->>>>>>> 58b40e3e05e0aed669317b0fcec4e1db9f0a7bbe
+
 
 def logout_view(request):
    logout(request)
