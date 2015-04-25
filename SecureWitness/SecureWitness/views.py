@@ -137,11 +137,8 @@ def my_view(request):
          print("user is disabled")
          return render(request, 'InvalidLogin.html')
 
-<<<<<<< HEAD
-=======
 def Reportview(request):
   return render(request, 'ReportView.html')
->>>>>>> 58b40e3e05e0aed669317b0fcec4e1db9f0a7bbe
 
 def logout_view(request):
    logout(request)
