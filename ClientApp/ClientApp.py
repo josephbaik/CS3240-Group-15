@@ -1,19 +1,16 @@
-import urllib3, os, json, requests
+import urllib3, os, json, requests, getpass
 from Decrypter import decrypt_file
 from requests.auth import HTTPBasicAuth
 
 user = input("Username: ")
-password = input("Password: ")
+password = getpass.getpass("Password: ")
 login = requests.post('http://127.0.0.1:8000/requestlogin/', {'username':user, 'password':password})
-print(login.status_code)
-for key in login.cookies.keys():
-    print(key)
-    print(login[key])
-g = requests.get('http://127.0.0.1:8000/requestgroups')
+g = requests.get('http://127.0.0.1:8000/requestgroups', cookies=login.cookies)
 groupDict = g.json()
-print(g.text)
+print("You are a member of the following groups:")
 for i in groupDict['groups']:
-    print(i)
+    print("    %s" %i)
+print("For which groups would you like to view your reports?")
 
 fname = input("What is the name of the file you would like to download?: ")
 key = input("Please specify an AES-256 security key: ")
