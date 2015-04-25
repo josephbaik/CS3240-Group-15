@@ -1,5 +1,7 @@
 __author__ = 'josephbaik'
 
+from django.contrib.auth.models import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.files import File
@@ -21,31 +23,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-def firstscreen(request):
-   return render(request, 'login.html')
 
-def register(request):
-   return render(request, 'register.html')
-
-def addUser(request):
-   username = request.POST.get('username')
-   email = request.POST.get('email')
-   password = request.POST.get('password')
-   confirmpassword = request.POST.get('confirmpassword')
-   
-   if(password == confirmpassword):
-      user = User.objects.create_user(username, email, password)
-      
-      
-      permission1 = Permission.objects.get(codename='add_page')
-      #permission2 = Permission.objects.get(codename='read_page')
-      user.user_permissions.add(permission1)
-      user.user_permissions.add(2)
-
-      return render(request, 'usercreated.html')
-   else:
-      raise ValidationError(password)
-      return render(request, 'register.html')
 
 def reporter(request):
     if request.user.has_perm('SecWit.add_page') is not True:
@@ -94,15 +72,55 @@ def reporter(request):
           return render(request, 'ReporterHomePage.html')
     else:
         return render(request, 'ReporterHomePage.html')
+        
+        
+        
+        
 def adm(request):
     if request.user.has_perm('SecWit.manage_group'):
       return render(request, 'AdminHomePage.html')
     return render(request, 'invalidpermission.html')  
+
+
+
+
 def reader(request):
     if request.user.has_perm('SecWit.add_page') is not True:
       return render(request, 'invalidpermission.html')
     reports = Report.objects.all()
     return render(request, 'ReaderHomepage.html', {'reports': reports})
+
+
+
+
+"""Login/User Creation Process VIEWS"""
+
+def firstscreen(request):
+   return render(request, 'login.html')
+
+def register(request):
+   return render(request, 'register.html')
+
+def addUser(request):
+   username = request.POST.get('username')
+   email = request.POST.get('email')
+   password = request.POST.get('password')
+   confirmpassword = request.POST.get('confirmpassword')
+   
+   if(password == confirmpassword):
+      user = User.objects.create_user(username, email, password)
+      
+      
+      permission1 = Permission.objects.get(codename='add_page')
+      #permission2 = Permission.objects.get(codename='read_page')
+      user.user_permissions.add(permission1)
+      user.user_permissions.add(2)
+
+      return render(request, 'usercreated.html')
+   else:
+      raise ValidationError(password)
+      return render(request, 'register.html')
+
 
 def my_view(request):
    username = request.POST.get('username')
@@ -119,20 +137,69 @@ def my_view(request):
          print("user is disabled")
          return render(request, 'InvalidLogin.html')
 
+<<<<<<< HEAD
+=======
 def Reportview(request):
   return render(request, 'ReportView.html')
+>>>>>>> 58b40e3e05e0aed669317b0fcec4e1db9f0a7bbe
 
 def logout_view(request):
    logout(request)
    return render(request, 'login.html')
 
 @csrf_exempt   
+
 def login_user(request):
    username = request.POST['username']
    password=request.POST['password']
    user = authenticate(username=username, password=password)
    login(request, user)
    return render(request, 'ReaderHomepage.html', {'firstname': request.user.username})
+
+
+
+"""-------------Create/Manage Groups-------------------"""
+
+def newGroupPage(request):
+   return render(request, 'createGroup.html')
+   
+
+
+def createGroup(request):
+
+   groupname = request.POST.get('groupname')
+   
+   group = Group.objects.create(name=groupname)
+   user = User.objects.get(username=request.user.username)
+   user.groups.add(group)
+   return render(request, 'addUserToGroup.html')
+
+
+
+def addUserToGroupPage(request):
+   return render(request, 'addUserToGroup.html')
+
+
+def addUserToGroup(request):
+
+
+   username = request.POST.get('username')
+   groupname = request.POST.get('groupname')
+   
+   group = Group.objects.get(name=groupname)
+   
+   user = User.objects.get(username=username)
+   
+   user.groups.add(group)
+   
+   return render(request, 'addUserToGroup.html')
+   
+
+
+
+
+"""------------------------------------------------"""
+
 
 def requestgroups(request):
    list = {'groups' : []}

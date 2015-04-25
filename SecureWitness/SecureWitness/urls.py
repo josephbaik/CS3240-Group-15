@@ -22,5 +22,9 @@ urlpatterns = patterns('',
     url(r'^requestgroups/?$', 'SecureWitness.views.requestgroups', name = 'requestgroups',),
     url(r'^requestreports/?$', 'SecureWitness.views.requestreports', name = 'requestreports',),
     url(r'^requestlogin/?$', 'SecureWitness.views.login_user', name = 'requestlogin',),
+    url(r'^newGroupPage/?$', 'SecureWitness.views.newGroupPage', name = 'newGroupPage',),
+    url(r'^addUserToGroupPage/?$', 'SecureWitness.views.addUserToGroupPage', name = 'addUserToGroupPage',),
+    url(r'^createGroup/?$', 'SecureWitness.views.createGroup', name = 'createGroup',),
+    url(r'^addUserToGroup/?$', 'SecureWitness.views.addUserToGroup', name = 'addUserToGroup',)
 
 )
