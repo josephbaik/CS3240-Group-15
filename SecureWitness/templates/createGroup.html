@@ -60,24 +60,15 @@
 </div>
 
 <div id="section">
-<h2>Welcome to SecureWitness {{firstname}}!</h2>
-<form class="form-inline" id="user_form" method="post">
-     {% csrf_token %}
-     <!-- Display the search form elements here -->
-     <input class="form-control" type="text" size="50" name="query" value="{{query}}" id="query" />
-     <input class="btn btn-primary" type="submit" name="submit" value="Search" />
+
+<form action="/createGroup/" method="post">{% csrf_token %}
+Group Name: <input type="text" name="groupname"><br>
+</br>
+<input type="submit" value="Register">
 </form>
-<p>
 
-{% for r_field in reports %}
-<a href = {{r.field.url}} download>
-<table>
-<!-- <tr><th>Header</th></tr> -->
-    <tr><td>{{r_field.title}}</td></tr>
-</table></a>
-{% endfor %}
 
-</p>
+
 
 </br>
 </br>
@@ -91,3 +82,4 @@ Developed by Joseph Baik
 
 </body>
 </html>
+
