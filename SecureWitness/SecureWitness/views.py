@@ -130,11 +130,13 @@ def login_user(request):
 def requestgroups(request):
    list = {'groups' : []}
    print(request.user.username)
-   if request.user is not None:
-      if request.user.is_authenticated():
-         print("You have a name")
-      else:
-         print("You are anonymous")
    for g in request.user.groups.all():
       list['groups'].append(g.name)
+   return JsonResponse(list)
+
+def requestreports(request):
+   list = {'reports' : []}
+   print(request.user.username)
+   for g in Report.objects.all():
+      list['reports'].append(g.title)
    return JsonResponse(list)
