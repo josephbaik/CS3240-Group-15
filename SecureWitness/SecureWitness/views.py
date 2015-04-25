@@ -30,46 +30,46 @@ def reporter(request):
         return render(request, 'invalidpermission.html')
     if request.method == 'POST':
         if request.method == 'POST':
-        author = str(request.user.username)
-        folder = request.POST.get('folder', '')
-        upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-        upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
+          author = str(request.user.username)
+          folder = request.POST.get('folder', '')
+          upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
+          upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
 
-        if not os.path.exists(upload_full_path):
+          if not os.path.exists(upload_full_path):
             os.makedirs(upload_full_path)
-        upload = request.FILES['myfile']
+          upload = request.FILES['myfile']
 
-        while os.path.exists(os.path.join(upload_full_path, upload.name)):
+          while os.path.exists(os.path.join(upload_full_path, upload.name)):
             upload.name = '_' + upload.name
-        dest = open(os.path.join(upload_dir, upload.name+".raw"), 'wb+')
-        print (str(dest))
-        for chunk in upload.chunks():
+          dest = open(os.path.join(upload_full_path, upload.name+".raw"), 'wb+')
+          print (str(dest))
+          for chunk in upload.chunks():
             dest.write(chunk)
-        dest.close()
+          dest.close()
 
-        reportdest = os.path.join(settings.MEDIA_ROOT, author + '/' + folder + '/' + upload.name+".raw")
-        incdate = request.POST.get('date', False)
-        inctime = request.POST.get('time', False)
-        loc = request.POST.get('location', 'none')
+          reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
+          incdate = request.POST.get('date', False)
+          inctime = request.POST.get('time', False)
+          loc = request.POST.get('location', 'none')
 
-        timestamp = time.ctime()
+          timestamp = time.ctime()
 
-        if incdate and not inctime:
-          report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-        if incdate and inctime:
-          report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-        if not incdate and inctime:
-          report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-        if not incdate and not inctime:
-          report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+          if incdate and not inctime:
+            report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+          if incdate and inctime:
+            report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+          if not incdate and inctime:
+           report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+          if not incdate and not inctime:
+            report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
 
-        report.save()
+          report.save()
 
-        encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(settings.MEDIA_ROOT, upload.name+".raw"), os.path.join(settings.MEDIA_ROOT, upload.name))
+          encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
 
-        os.remove(os.path.join(upload_dir, upload.name+".raw"))
+          os.remove(os.path.join(upload_dir, upload.name+".raw"))
 
-        return render(request, 'ReporterHomePage.html')
+          return render(request, 'ReporterHomePage.html')
     else:
         return render(request, 'ReporterHomePage.html')
         
