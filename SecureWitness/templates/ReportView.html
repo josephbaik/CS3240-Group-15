@@ -1,6 +1,4 @@
-<!DOCTYPE html>
 <html>
-
 <head>
 <style>
 #header {
@@ -51,36 +49,10 @@
 <form action="{% url "Home" %}">
 <button type="Reader">Read Files</button>
 </form>
-<form action="{% url "newGroupPage" %}">
-<button type="CreateGroup">Create Group</button>
-</form>
-<form action="{% url "addUserToGroupPage" %}">
-<button type="addUserToGroupPage">Manage Groups</button>
-</form>
 </div>
 
 <div id="section">
-<h2>Welcome to SecureWitness {{firstname}}!</h2>
-<form class="form-inline" id="user_form" method="post">
-     {% csrf_token %}
-     <!-- Display the search form elements here -->
-     <input class="form-control" type="text" size="50" name="query" value="{{query}}" id="query" />
-     <input class="btn btn-primary" type="submit" name="submit" value="Search" />
-</form>
-<p>
-
-{% for r_field in reports %}
-<table>
-    
-    <tr><td><a href = "{% url "Report" %}">{{r_field.title}}</a></td></tr> 
-</table>
-{% endfor %}
-
-</p>
-
-</br>
-</br>
-<a href = "{% url "logout" %}">Log Out</a>
+	
 </div>
 
 <div id="footer">
