@@ -141,5 +141,8 @@ def requestreports(request):
    list = {'reports' : []}
    print(request.user.username)
    for g in Report.objects.all():
-      list['reports'].append(g.title)
+      for u in g.users.all():
+         print(u.username)
+         if u.username == request.user.username:
+            list['reports'].append(g.title)
    return JsonResponse(list)
