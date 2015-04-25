@@ -10,6 +10,7 @@ from django.contrib.auth.models import User, Permission
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 
 from SecureWitness.Encrypter import encrypt_file
 
@@ -120,25 +121,23 @@ def Reportview(request):
 def logout_view(request):
    logout(request)
    return render(request, 'login.html')
-   
-@require_http_methods(["POST"])
+
+@csrf_exempt   
 def login_user(request):
-   print("You aren't dumb.")
-   user = authenticate(username=request.POST['username'], password=request.POST['password'])
+   username = request.POST['username']
+   password=request.POST['password']
+   user = authenticate(username=username, password=password)
    login(request, user)
-   return HttpResponse("Logged In")
+   return render(request, 'ReaderHomepage.html', {'firstname': request.user.username})
 
 def requestgroups(request):
    list = {'groups' : []}
    print(request.user.username)
    if request.user is not None:
-      print("Your user is not none.")
       if request.user.is_authenticated():
          print("You have a name")
       else:
          print("You are anonymous")
-   else:
-      print("Your user name is none.")
    for g in request.user.groups.all():
       list['groups'].append(g.name)
    return JsonResponse(list)
