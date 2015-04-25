@@ -73,13 +73,13 @@ def reporter(request):
         timestamp = time.ctime()
 
         if incdate and not inctime:
-          report = Report(title=request.POST['title'], author='bruh', date=str(date.today()), url=reportdest, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+          report = Report(title=request.POST['title'], author='bruh', date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
         if incdate and inctime:
-          report = Report(title=request.POST['title'], author='bruh', date=str(date.today()), time=timestamp, url=reportdest, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+          report = Report(title=request.POST['title'], author='bruh', date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
         if not incdate and inctime:
-          report = Report(title=request.POST['title'], author='bruh', time=str(timestamp), url=reportdest, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+          report = Report(title=request.POST['title'], author='bruh', time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
         if not incdate and not inctime:
-          report = Report(title=request.POST['title'], author='bruh', url=reportdest, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+          report = Report(title=request.POST['title'], author='bruh', url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
 
         report.save()
 
@@ -114,6 +114,9 @@ def my_view(request):
       else:
          print("user is disabled")
          return render(request, 'InvalidLogin.html')
+
+def Reportview(request):
+  return render(request, 'ReportView.html')
 
 def logout_view(request):
    logout(request)
