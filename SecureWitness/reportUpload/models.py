@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
+from django.core import urlresolvers
 # Create your models here.
 class Report(models.Model):
         title = models.CharField(max_length=128)
@@ -15,6 +16,9 @@ class Report(models.Model):
         users = models.ManyToManyField(User, related_name='reports')
         groups = models.ManyToManyField(Group, related_name='reports')
         tags = models.TextField(default='')
+        
+        def get_absolute_url(self):
+        	return urlresolvers.reverse('report', args=(self.title,))
 
         def __str__(self):
                 return self.title

@@ -31,6 +31,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 def reporter(request):
 
+<<<<<<< HEAD
    if request.user.has_perm('SecWit.add_page') is not True:
       return render(request, 'invalidpermission.html')
    if request.method == 'POST':
@@ -97,32 +98,54 @@ def reporter(request):
    else:
       return render(request, 'ReporterHomePage.html')
           dest.close()
+=======
+    if request.user.has_perm('SecWit.add_page') is not True:
+        return render(request, 'invalidpermission.html')
+    if request.method == 'POST':
+        author = str(request.user.username)
+        folder = request.POST.get('folder', '')
+        upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
+        upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
 
-          reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
-          incdate = request.POST.get('date', False)
-          inctime = request.POST.get('time', False)
-          loc = request.POST.get('location', 'none')
+        if not os.path.exists(upload_full_path):
+            os.makedirs(upload_full_path)
+        upload = request.FILES['myfile']
+      
+        while os.path.exists(os.path.join(upload_full_path, upload.name)):
+            upload.name = '_' + upload.name
+        dest = open(os.path.join(upload_full_path, upload.name+".raw"), 'wb+')
+        print (str(dest))
+        for chunk in upload.chunks():
+            dest.write(chunk)
+>>>>>>> c2d14bfeee8a6e7b230e0bd3eb605ea74c3ca6a0
 
-          timestamp = time.ctime()
+        dest.close()
 
-          tags = request.POST['tags']
+        reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
+        incdate = request.POST.get('date', False)
+        inctime = request.POST.get('time', False)
+        loc = request.POST.get('location', 'none')
 
-          if incdate and not inctime:
+        timestamp = time.ctime()
+
+        tags = request.POST.get('tags', '')
+
+        if incdate and not inctime:
             report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
-          if incdate and inctime:
+        if incdate and inctime:
             report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
-          if not incdate and inctime:
-           report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
-          if not incdate and not inctime:
+        if not incdate and inctime:
+            report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
+        if not incdate and not inctime:
             report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
 
-          report.save()
+        report.save()
 
-          encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
+        encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
+    
+        os.remove(os.path.join(upload_dir, upload.name+".raw"))
 
-          os.remove(os.path.join(upload_dir, upload.name+".raw"))
-
-          return render(request, 'ReporterHomePage.html')
+        return render(request, 'ReporterHomePage.html')
     else:
         return render(request, 'ReporterHomePage.html')
         
@@ -190,6 +213,7 @@ def my_view(request):
          print("user is disabled")
          return render(request, 'InvalidLogin.html')
 
+<<<<<<< HEAD
 
 def Reportview(request):
    return render(request, 'ReportView.html')
@@ -197,6 +221,14 @@ def Reportview(request):
 def Reportview(request):
    return render(request, 'ReportView.html')
 
+=======
+def Reportview(request, report=None):
+  report = urllib
+  if report == None:
+    return render(request, 'ReportView.html', {'rep': 'no report here!'})
+  else:
+    return render(request, 'ReportView.html', {'rep': report})
+>>>>>>> c2d14bfeee8a6e7b230e0bd3eb605ea74c3ca6a0
 
 def logout_view(request):
    logout(request)
@@ -265,17 +297,14 @@ def addUserToGroup(request):
 
 def requestgroups(request):
    list = {'groups' : []}
-   print(request.user.username)
    for g in request.user.groups.all():
       list['groups'].append(g.name)
    return JsonResponse(list)
 
 def requestreports(request):
    list = {'reports' : []}
-   print(request.user.username)
    for g in Report.objects.all():
       for u in g.users.all():
-         print(u.username)
          if u.username == request.user.username:
             list['reports'].append(g.title)
    return JsonResponse(list)
