@@ -30,141 +30,56 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 def reporter(request):
+     if request.method == 'POST':
+         author = str(request.user.username)
+         folder = request.POST.get('folder', '')
+         upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
+         upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
 
-
-   
-   if request.method == 'POST':
-      if request.method == 'POST':
-      
-         author = str(request.user.username)
-         folder = request.POST.get('folder', '')
-         upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-         upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
-      
-         author = str(request.user.username)
-         folder = request.POST.get('folder', '')
-         upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-         upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
-      
-      
          if not os.path.exists(upload_full_path):
-           
-            if request.method == 'POST':
-               if request.method == 'POST':
-                  author = str(request.user.username)
-                  folder = request.POST.get('folder', '')
-                  upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-                  upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
-               
-                  if not os.path.exists(upload_full_path):
-                     os.makedirs(upload_full_path)
-                  upload = request.FILES['myfile']
-               
-                  while os.path.exists(os.path.join(upload_full_path, upload.name)):
-                     upload.name = '_' + upload.name
-                  dest = open(os.path.join(upload_full_path, upload.name+".raw"), 'wb+')
-                  print (str(dest))
-                  for chunk in upload.chunks():
-                     dest.write(chunk)
-                  dest.close()
-               
-                  reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
-                  incdate = request.POST.get('date', False)
-               
-               
-                  inctime = request.POST.get('time', False)
-                  loc = request.POST.get('location', 'none')
-               
-                  timestamp = time.ctime()
-            
-               if incdate and not inctime:
-                  report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-               if incdate and inctime:
-                  report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-               if not incdate and inctime:
-                  report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-               if not incdate and not inctime:
-                  report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-            
-               report.save()
-            
-               encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
-            
-               os.remove(os.path.join(upload_dir, upload.name+".raw"))
-            
-               return render(request, 'ReporterHomePage.html')
-   else:
-      return render(request, 'ReporterHomePage.html')
-      dest.close()
-   
-      
-      if request.method == 'POST':
-         author = str(request.user.username)
-         folder = request.POST.get('folder', '')
-         upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-         upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
-      
-         if not os.path.exists(upload_full_path):
-            os.makedirs(upload_full_path)
+             os.makedirs(upload_full_path)
          upload = request.FILES['myfile']
-      
+
          while os.path.exists(os.path.join(upload_full_path, upload.name)):
-            upload.name = '_' + upload.name
+             upload.name = '_' + upload.name
          dest = open(os.path.join(upload_full_path, upload.name+".raw"), 'wb+')
          print (str(dest))
          for chunk in upload.chunks():
-            dest.write(chunk)
-      
+             dest.write(chunk)
          dest.close()
-      
+
          reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
          incdate = request.POST.get('date', False)
+
+
          inctime = request.POST.get('time', False)
          loc = request.POST.get('location', 'none')
-      
+
          timestamp = time.ctime()
-      
-         tags = request.POST.get('tags', '')
-      
+
          if incdate and not inctime:
-            report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
+             report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
          if incdate and inctime:
-            report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
+             report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
          if not incdate and inctime:
-            report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
+             report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
          if not incdate and not inctime:
-            report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
-      
+             report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+
          report.save()
-      
+
          encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
-      
+
          os.remove(os.path.join(upload_dir, upload.name+".raw"))
-      
+
          return render(request, 'ReporterHomePage.html')
-      else:
+     else:
          return render(request, 'ReporterHomePage.html')
-        
-        
-        
-        
+
 def adm(request):
    if Group.objects.get(name="admin") in request.user.groups.all():
       return render(request, 'AdminHomePage.html')
    return render(request, 'invalidpermission.html')  
-
-
-
-
-<<<<<<< HEAD
-
-=======
-def reader(request):
-   reports = Report.objects.all()
-   return render(request, 'ReaderHomepage.html', {'reports': reports})
->>>>>>> 9d4f99ea670a35257f83e4cb6848bea2103099cc
-
-
 
 
 """Login/User Creation Process VIEWS"""
@@ -189,11 +104,6 @@ def addUser(request):
    
    if(password == confirmpassword):
       user = User.objects.create_user(username, email, password)
-<<<<<<< HEAD
-      
-               
-=======
->>>>>>> 9d4f99ea670a35257f83e4cb6848bea2103099cc
       return render(request, 'usercreated.html')
    else:
       raise ValidationError(password)
@@ -252,12 +162,6 @@ def my_view(request):
          print("user is disabled")
          return render(request, 'InvalidLogin.html')
 
-
-def Reportview(request):
-   return render(request, 'ReportView.html')
-
-def Reportview(request):
-   return render(request, 'ReportView.html')
 
 def Reportview(request, report=None):
    report = urllib
