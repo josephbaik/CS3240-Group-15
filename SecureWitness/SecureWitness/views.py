@@ -59,7 +59,7 @@ def reporter(request):
 
         timestamp = time.ctime()
 
-        tags = request.POST['tags']
+        tags = request.POST.get('tags', '')
 
         if incdate and not inctime:
             report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
