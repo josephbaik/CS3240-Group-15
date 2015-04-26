@@ -59,26 +59,20 @@
 
 <div id="section">
 
-<p>Groups that you're in: </p>
+<p>Search Results: </p>
 
 
-{% if groups_that_user_is_in %}
+{% if report_containing_keywords %}
 	<ul>
-{% for group in groups_that_user_is_in %}
-<li>{{group.name}}</li>
+{% for report in report_containing_keywords %}
+<table>
+    
+    <tr><td><a href = "{% url "Report" %}?report={{report}}">{{report.title}}</a></td></tr> 
+</table>
 {% endfor %}
-</ul>
-
+{% else %}
+	<p>No articles match your query</p>
 {% endif %}
-
-<form action="/addUserToGroup/" method="post">{% csrf_token %}
-Group Name: <input type="text" name="groupname"><br>
-
-User Name: <input type="text" name="username"><br>
-</br>
-<input type="submit" value="Register">
-</form>
-
 
 
 
@@ -94,5 +88,6 @@ Developed by Joseph Baik
 
 </body>
 </html>
+
 
 

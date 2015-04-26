@@ -58,34 +58,27 @@
 </div>
 
 <div id="section">
+<h2>Groups and Members</h2>
 
-<p>Groups that you're in: </p>
 
 
-{% if groups_that_user_is_in %}
-	<ul>
-{% for group in groups_that_user_is_in %}
-<li>{{group.name}}</li>
+
+
+<p>
+
+{% for g in list_of_groups %}
+<table>
+<tr><td>{{g.name}}</td></tr>
+{% for user in users %}
+<tr><td>{{user.username}}</td></tr>
 {% endfor %}
-</ul>
-
-{% endif %}
-
-<form action="/addUserToGroup/" method="post">{% csrf_token %}
-Group Name: <input type="text" name="groupname"><br>
-
-User Name: <input type="text" name="username"><br>
-</br>
-<input type="submit" value="Register">
-</form>
-
-
-
+{% endfor %}
+</table>
+</p>
 
 </br>
 </br>
 <a href = "{% url "logout" %}">Log Out</a>
-
 </div>
 
 <div id="footer">
@@ -94,5 +87,4 @@ Developed by Joseph Baik
 
 </body>
 </html>
-
 

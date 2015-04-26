@@ -48,8 +48,7 @@ def reporter(request):
       
       
          if not os.path.exists(upload_full_path):
-            if request.user.has_perm('SecWit.add_page') is not True:
-               return render(request, 'invalidpermission.html')
+           
             if request.method == 'POST':
                if request.method == 'POST':
                   author = str(request.user.username)
@@ -157,15 +156,18 @@ def adm(request):
 
 
 
-def reader(request):
-   
-   reports = Report.objects.all()
-   return render(request, 'ReaderHomepage.html', {'reports': reports})
+
 
 
 
 
 """Login/User Creation Process VIEWS"""
+
+def reader(request):
+   
+   reports = Report.objects.all()
+   return render(request, 'ReaderHomepage.html', {'firstname': request.user.username, 'reports': reports})
+
 
 def firstscreen(request):
    return render(request, 'login.html')
@@ -182,9 +184,7 @@ def addUser(request):
    if(password == confirmpassword):
       user = User.objects.create_user(username, email, password)
       
-      
-      
-   
+               
       return render(request, 'usercreated.html')
    else:
       raise ValidationError(password)
@@ -200,7 +200,7 @@ def my_view(request):
       if user.is_active:
          login(request, user)
          reports = Report.objects.all()
-         return render(request, 'ReaderHomepage.html', {'firstname': request.user.username, 'reports': reports})
+         return HttpResponseRedirect(reverse('Home'))         
          
       else:
          print("user is disabled")
@@ -244,15 +244,21 @@ def newGroupPage(request):
 def createGroup(request):
 
    groupname = request.POST.get('groupname')
-   
+   if not groupname:
+      return HttpResponseRedirect(reverse('newGroupPage'))
    group = Group.objects.create(name=groupname)
    user = User.objects.get(username=request.user.username)
    user.groups.add(group)
+   
+   return HttpResponseRedirect(reverse('addUserToGroupPage'))
+   reverse('addUserToGroupPage')
    return render(request, 'addUserToGroup.html', {'groups_that_user_is_in': user.groups.all()})
 
 
+
 def addUserToGroupPage(request):
-   user = User.objects.get(username=request.user.username)
+   
+   user = User.objects.get(username=request.user.username)   
    return render(request, 'addUserToGroup.html', {'groups_that_user_is_in': user.groups.all()})
    
 
@@ -266,17 +272,17 @@ def addUserToGroup(request):
    groupname = request.POST.get('groupname')
    
    
+   if(Group.objects.filter(name__icontains=groupname) and User.objects.filter(username__contains=username)):
+       group = Group.objects.get(name=groupname)   
+       user = User.objects.get(username=username)
    
-   group = Group.objects.get(name=groupname)   
-   user = User.objects.get(username=username)
+       loggedinUser = User.objects.get(username = request.user.username)
    
-   loggedinUser = User.objects.get(username = request.user.username)
+       if group in loggedinUser.groups.all():   
+         user.groups.add(group)
    
-   if group in loggedinUser.groups.all():   
-      user.groups.add(group)
+   return HttpResponseRedirect(reverse('addUserToGroupPage'))
    
-   
-   return render(request, 'addUserToGroup.html', {'groups_that_user_is_in': loggedinUser.groups.all()})
    
 
 
@@ -298,3 +304,30 @@ def requestreports(request):
          if u.username == request.user.username:
             list['reports'].append(g.title)
    return JsonResponse(list)
+
+
+
+"""-------------------SEARCH------------------------"""
+
+
+def searchForReports(request):
+
+   keyword = request.POST.get('query')
+   q = Report.objects.filter(title__icontains=keyword)
+   
+   return render(request, 'searchResults.html', {'report_containing_keywords': q})
+   
+   
+"""-------------GROUP AND USER LISTS-------------------"""
+
+
+def listGroupsAndUsers(request):
+
+ 
+   groups = request.user.groups.all()
+   a = []
+   #for g in groups:
+   #   a.add(g.user_set.all())
+   return render(request, 'groupanduserlists.html', {'list_of_groups': groups, 'users': a})
+   
+

@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^createGroup/?$', 'SecureWitness.views.createGroup', name = 'createGroup',),
     url(r'^addUserToGroup/?$', 'SecureWitness.views.addUserToGroup', name = 'addUserToGroup',),
     url(r'^addUserToGroupPage/?$', 'SecureWitness.views.addUserToGroupPage', name = 'addUserToGroupPage',),
-
+    url(r'^searchForReports/?$', 'SecureWitness.views.searchForReports', name = 'searchForReports',),
+    url(r'^listGroupsAndUsers/?$', 'SecureWitness.views.listGroupsAndUsers', name = 'listGroupsAndUsers',),
     # url(r'^reportview/(?P<report>\w+)/$', 'app.views.Reportview', name='report'),
 )
