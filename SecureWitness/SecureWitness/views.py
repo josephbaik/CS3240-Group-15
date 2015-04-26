@@ -31,8 +31,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 def reporter(request):
 
-    if request.user.has_perm('SecWit.add_page') is not True:
-        return render(request, 'invalidpermission.html')
     if request.method == 'POST':
         author = str(request.user.username)
         folder = request.POST.get('folder', '')
@@ -71,6 +69,8 @@ def reporter(request):
             report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
 
         report.save()
+        report.users.add(request.user)
+        report.groups.add(Group.objects.get(name="admin"))
 
         encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
     
@@ -84,7 +84,7 @@ def reporter(request):
         
         
 def adm(request):
-   if request.user.has_perm('SecWit.manage_group'):
+   if Group.objects.get(name="admin") in request.user.groups.all():
       return render(request, 'AdminHomePage.html')
    return render(request, 'invalidpermission.html')  
 
@@ -92,8 +92,6 @@ def adm(request):
 
 
 def reader(request):
-   if request.user.has_perm('SecWit.add_page') is not True:
-      return render(request, 'invalidpermission.html')
    reports = Report.objects.all()
    return render(request, 'ReaderHomepage.html', {'reports': reports})
 
@@ -116,18 +114,49 @@ def addUser(request):
    
    if(password == confirmpassword):
       user = User.objects.create_user(username, email, password)
-      
-      
-      permission1 = Permission.objects.get(codename='add_page')
-      #permission2 = Permission.objects.get(codename='read_page')
-      user.user_permissions.add(permission1)
-      user.user_permissions.add(2)
    
       return render(request, 'usercreated.html')
    else:
       raise ValidationError(password)
       return render(request, 'register.html')
 
+def SharingPage(request):
+    return render(request, 'share.html')
+
+def shareReport(request):
+    rep = False
+    gro = False
+    usr = False
+    rpt = None
+    grp = None
+    us3r = None
+    for g in Group.objects.all():
+        if g.name == request.POST.get('group'):
+            grp = g
+    for u in User.objects.all():
+        if u.username == request.POST.get('user'):
+            us3r = u
+    for r in Report.objects.all():
+        if r.title == request.POST.get('report'):
+            rpt = r
+    if rpt == None:
+        return render(request, 'share.html')
+    if grp != None: 
+        for g in request.user.groups.all():
+            if grp.name == g.name:
+                gro = True
+            if g.name == "admin":
+                rep = True
+    if rpt.author == request.user.username:
+        rep = True
+    if us3r != None:
+        usr = True
+    if gro:
+        rpt.groups.add(grp)
+    if usr:
+        rpt.users.add(us3r)
+    return render(request, 'share.html')
+        
 
 def my_view(request):
    username = request.POST.get('username')
@@ -224,8 +253,14 @@ def requestgroups(request):
 
 def requestreports(request):
    list = {'reports' : []}
+   hasPrinted = False
    for g in Report.objects.all():
-      for u in g.users.all():
-         if u.username == request.user.username:
-            list['reports'].append(g.title)
+       for u in g.users.all():
+           if u.username == request.user.username:
+               list['reports'].append(g.title)
+               hasPrinted = True
+       if not hasPrinted:
+           for u in g.groups.all():
+               if u in request.user.groups.all():
+                   list['reports'].append(g.title)
    return JsonResponse(list)

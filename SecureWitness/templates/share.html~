@@ -51,9 +51,6 @@
 <form action="{% url "addUserToGroupPage" %}">
 <button type="addUserToGroupPage">Manage Groups</button>
 </form>
-<form action="{% url "SharingPage" %}">
-<button type="SharingPage">Share Your Reports</button>
-</form>
 </div>
 
 <div id="section">
@@ -70,10 +67,12 @@
 
 {% endif %}
 
-<form action="/addUserToGroup/" method="post">{% csrf_token %}
-Group Name: <input type="text" name="groupname"><br>
+<form action="/shareReport/" method="post">{% csrf_token %}
+Report Name: <input type="text" name="report"><br>
 
-User Name: <input type="text" name="username"><br>
+Group To Share with (Blank if none): <input type="text" name="group"><br>
+
+User To Share with (Blank if none): <input type="text" name="user"><br>
 </br>
 <input type="submit" value="Register">
 </form>
@@ -88,10 +87,8 @@ User Name: <input type="text" name="username"><br>
 </div>
 
 <div id="footer">
-Developed by Joseph Baik
+Developed by Ben Gilbert (Ha, got 'em)
 </div>
 
 </body>
 </html>
-
-
