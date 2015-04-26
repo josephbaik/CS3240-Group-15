@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'^reporterhome', 'SecureWitness.views.reporter', name='reporterHome'),
     url(r'^adminhome', 'SecureWitness.views.adm', name='adminHome'),
     url(r'^readerhome', 'SecureWitness.views.reader', name='Home'),
-    url(r'^reportview/?$', 'SecureWitness.views.Reportview', name='Report'),
+    url(r'^reportview/$', 'SecureWitness.views.Reportview', name='Report'),
     url(r'^my_view/?$', 'SecureWitness.views.my_view', name='login-view',),
     url(r'^register/?$', 'SecureWitness.views.register', name='register',),
     url(r'^addUser/?$', 'SecureWitness.views.addUser', name='addUser',),
@@ -27,4 +27,5 @@ urlpatterns = patterns('',
     url(r'^createGroup/?$', 'SecureWitness.views.createGroup', name = 'createGroup',),
     url(r'^addUserToGroup/?$', 'SecureWitness.views.addUserToGroup', name = 'addUserToGroup',)
 
+    # url(r'^reportview/(?P<report>\w+)/$', 'app.views.Reportview', name='report'),
 )

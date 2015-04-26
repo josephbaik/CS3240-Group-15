@@ -139,8 +139,12 @@ def my_view(request):
          print("user is disabled")
          return render(request, 'InvalidLogin.html')
 
-def Reportview(request):
-  return render(request, 'ReportView.html')
+def Reportview(request, report=None):
+  report = urllib
+  if report == None:
+    return render(request, 'ReportView.html', {'rep': 'no report here!'})
+  else:
+    return render(request, 'ReportView.html', {'rep': report})
 
 def logout_view(request):
    logout(request)

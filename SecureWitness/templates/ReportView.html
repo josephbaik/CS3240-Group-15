@@ -37,22 +37,22 @@
 </div>
 
 <div id="nav">
-<form action="ReaderHomepage.html">
+<form action="{% url "Home" %}">
 <button type="Home">Home</button>
-</form>
-<form action="{% url "adminHome" %}">
-<button type="Admin">Manage Groups</button>
 </form>
 <form action="{% url "reporterHome" %}">
 <button type="Reporter">Add Files</button>
 </form>
-<form action="{% url "Home" %}">
-<button type="Reader">Read Files</button>
+<form action="{% url "newGroupPage" %}">
+<button type="CreateGroup">Create Group</button>
+</form>
+<form action="{% url "addUserToGroupPage" %}">
+<button type="addUserToGroupPage">Manage Groups</button>
 </form>
 </div>
 
 <div id="section">
-	
+	{{rep.title}}
 </div>
 
 <div id="footer">
