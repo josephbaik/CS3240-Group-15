@@ -51,60 +51,46 @@
 <form action="{% url "addUserToGroupPage" %}">
 <button type="addUserToGroupPage">Manage Groups</button>
 </form>
-<<<<<<< HEAD
-<form action="{% url "listGroupsAndUsers" %}">
-<button type="grouplist">Groups and Users</button>
-</form>
-
-=======
 <form action="{% url "SharingPage" %}">
 <button type="SharingPage">Share Your Reports</button>
 </form>
->>>>>>> 9d4f99ea670a35257f83e4cb6848bea2103099cc
 </div>
 
 <div id="section">
-<h2>Welcome to SecureWitness {{firstname}}!</h2>
+
+<p>Groups that you're in: </p>
 
 
+{% if groups_that_user_is_in %}
+	<ul>
+{% for group in groups_that_user_is_in %}
+<li>{{group.name}}</li>
+{% endfor %}
+</ul>
 
+{% endif %}
 
-<form action = "/searchForReports/" class="form-inline" id="user_form" method="post">
+<form action="/shareReport/" method="post">{% csrf_token %}
+Report Name: <input type="text" name="report"><br>
 
-     {% csrf_token %}
-     <!-- Display the search form elements here -->
+Group To Share with (Blank if none): <input type="text" name="group"><br>
 
-
-     <input class="form-control" type="text" size="50" name="query" value="{{query}}" id="query" />
-
-
-     <input class="btn btn-primary" type="submit" name="submit" value="Search" />
-
-
+User To Share with (Blank if none): <input type="text" name="user"><br>
+</br>
+<input type="submit" value="Register">
 </form>
 
 
 
-
-
-<p>
-
-{% for r_field in reports %}
-<table>
-    
-    <tr><td><a href = "{% url "Report" %}?report={{r_field}}">{{r_field.title}}</a></td></tr> 
-</table>
-{% endfor %}
-
-</p>
 
 </br>
 </br>
 <a href = "{% url "logout" %}">Log Out</a>
+
 </div>
 
 <div id="footer">
-Developed by Joseph Baik
+Developed by Ben Gilbert (Ha, got 'em)
 </div>
 
 </body>

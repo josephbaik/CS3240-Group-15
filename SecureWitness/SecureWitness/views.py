@@ -149,14 +149,20 @@ def reporter(request):
         
         
 def adm(request):
-   
-   return render(request, 'AdminHomePage.html')
-   
+   if Group.objects.get(name="admin") in request.user.groups.all():
+      return render(request, 'AdminHomePage.html')
+   return render(request, 'invalidpermission.html')  
 
 
 
 
+<<<<<<< HEAD
 
+=======
+def reader(request):
+   reports = Report.objects.all()
+   return render(request, 'ReaderHomepage.html', {'reports': reports})
+>>>>>>> 9d4f99ea670a35257f83e4cb6848bea2103099cc
 
 
 
@@ -183,13 +189,53 @@ def addUser(request):
    
    if(password == confirmpassword):
       user = User.objects.create_user(username, email, password)
+<<<<<<< HEAD
       
                
+=======
+>>>>>>> 9d4f99ea670a35257f83e4cb6848bea2103099cc
       return render(request, 'usercreated.html')
    else:
       raise ValidationError(password)
       return render(request, 'register.html')
 
+def SharingPage(request):
+    return render(request, 'share.html')
+
+def shareReport(request):
+    rep = False
+    gro = False
+    usr = False
+    rpt = None
+    grp = None
+    us3r = None
+    for g in Group.objects.all():
+        if g.name == request.POST.get('group'):
+            grp = g
+    for u in User.objects.all():
+        if u.username == request.POST.get('user'):
+            us3r = u
+    for r in Report.objects.all():
+        if r.title == request.POST.get('report'):
+            rpt = r
+    if rpt == None:
+        return render(request, 'share.html')
+    if grp != None: 
+        for g in request.user.groups.all():
+            if grp.name == g.name:
+                gro = True
+            if g.name == "admin":
+                rep = True
+    if rpt.author == request.user.username:
+        rep = True
+    if us3r != None:
+        usr = True
+    if gro:
+        rpt.groups.add(grp)
+    if usr:
+        rpt.users.add(us3r)
+    return render(request, 'share.html')
+        
 
 def my_view(request):
    username = request.POST.get('username')
@@ -299,10 +345,16 @@ def requestgroups(request):
 
 def requestreports(request):
    list = {'reports' : []}
+   hasPrinted = False
    for g in Report.objects.all():
-      for u in g.users.all():
-         if u.username == request.user.username:
-            list['reports'].append(g.title)
+       for u in g.users.all():
+           if u.username == request.user.username:
+               list['reports'].append(g.title)
+               hasPrinted = True
+       if not hasPrinted:
+           for u in g.groups.all():
+               if u in request.user.groups.all():
+                   list['reports'].append(g.title)
    return JsonResponse(list)
 
 
