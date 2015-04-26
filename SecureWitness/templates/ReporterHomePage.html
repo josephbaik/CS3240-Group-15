@@ -37,10 +37,18 @@
 </div>
 
 <div id="nav">
+<form action="{% url "Home" %}">
 <button type="Home">Home</button>
-<button type="Admin">Admin</button>
-<button type="Reporter">Reporter</button>
-<button type="Reader">Reader</button>
+</form>
+<form action="{% url "reporterHome" %}">
+<button type="Reporter">Add Files</button>
+</form>
+<form action="{% url "newGroupPage" %}">
+<button type="CreateGroup">Create Group</button>
+</form>
+<form action="{% url "addUserToGroupPage" %}">
+<button type="addUserToGroupPage">Manage Groups</button>
+</form>
 </div>
 
 <div if="section">
@@ -64,6 +72,9 @@
 
     <textarea name="longdescription" cols="40" rows="5" ... ></textarea>
     </p>
+
+    Tags:
+    <input type="text" name="tags"/><br>
     
     <input type="file" name="myfile" />
     <input type="submit" name="submit" value="Submit" />

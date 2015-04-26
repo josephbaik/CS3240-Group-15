@@ -30,6 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 def reporter(request):
+<<<<<<< HEAD
    if request.user.has_perm('SecWit.add_page') is not True:
       return render(request, 'invalidpermission.html')
    if request.method == 'POST':
@@ -47,6 +48,18 @@ def reporter(request):
       
       
          if not os.path.exists(upload_full_path):
+=======
+    if request.user.has_perm('SecWit.add_page') is not True:
+        return render(request, 'invalidpermission.html')
+    if request.method == 'POST':
+        if request.method == 'POST':
+          author = str(request.user.username)
+          folder = request.POST.get('folder', '')
+          upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
+          upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
+
+          if not os.path.exists(upload_full_path):
+>>>>>>> eedd207f55f4e8e33421a37eb8c16a657f4b1ac2
             os.makedirs(upload_full_path)
          upload = request.FILES['myfile']
       
@@ -56,6 +69,7 @@ def reporter(request):
          print (str(dest))
          for chunk in upload.chunks():
             dest.write(chunk)
+<<<<<<< HEAD
          dest.close()
       
          reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
@@ -85,6 +99,37 @@ def reporter(request):
          return render(request, 'ReporterHomePage.html')
    else:
       return render(request, 'ReporterHomePage.html')
+=======
+          dest.close()
+
+          reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
+          incdate = request.POST.get('date', False)
+          inctime = request.POST.get('time', False)
+          loc = request.POST.get('location', 'none')
+
+          timestamp = time.ctime()
+
+          tags = request.POST['tags']
+
+          if incdate and not inctime:
+            report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
+          if incdate and inctime:
+            report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
+          if not incdate and inctime:
+           report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
+          if not incdate and not inctime:
+            report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
+
+          report.save()
+
+          encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
+
+          os.remove(os.path.join(upload_dir, upload.name+".raw"))
+
+          return render(request, 'ReporterHomePage.html')
+    else:
+        return render(request, 'ReporterHomePage.html')
+>>>>>>> eedd207f55f4e8e33421a37eb8c16a657f4b1ac2
         
         
         
@@ -150,20 +195,25 @@ def my_view(request):
          print("user is disabled")
          return render(request, 'InvalidLogin.html')
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> eedd207f55f4e8e33421a37eb8c16a657f4b1ac2
 def Reportview(request):
    return render(request, 'ReportView.html')
 
+<<<<<<< HEAD
 def Reportview(request):
    return render(request, 'ReportView.html')
 
 
+=======
+>>>>>>> eedd207f55f4e8e33421a37eb8c16a657f4b1ac2
 def logout_view(request):
    logout(request)
    return render(request, 'login.html')
 
-@csrf_exempt   
-
+@csrf_exempt
 def login_user(request):
    username = request.POST['username']
    password=request.POST['password']

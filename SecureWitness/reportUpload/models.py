@@ -14,6 +14,7 @@ class Report(models.Model):
         location = models.TextField(default='none')
         users = models.ManyToManyField(User, related_name='reports')
         groups = models.ManyToManyField(Group, related_name='reports')
+        tags = models.TextField(default='')
 
         def __str__(self):
                 return self.title
