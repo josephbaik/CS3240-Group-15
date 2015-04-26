@@ -30,50 +30,53 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 def reporter(request):
-     if request.method == 'POST':
-         author = str(request.user.username)
-         folder = request.POST.get('folder', '')
-         upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-         upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
+      if request.method == 'POST':
+        author = str(request.user.username)
+        folder = request.POST.get('folder', '')
+        upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
+        upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
 
-         if not os.path.exists(upload_full_path):
-             os.makedirs(upload_full_path)
-         upload = request.FILES['myfile']
+        if not os.path.exists(upload_full_path):
+          os.makedirs(upload_full_path)
+        upload = request.FILES['myfile']
 
-         while os.path.exists(os.path.join(upload_full_path, upload.name)):
-             upload.name = '_' + upload.name
-         dest = open(os.path.join(upload_full_path, upload.name+".raw"), 'wb+')
-         print (str(dest))
-         for chunk in upload.chunks():
-             dest.write(chunk)
-         dest.close()
+        while os.path.exists(os.path.join(upload_full_path, upload.name)):
+          upload.name = '_' + upload.name
+        dest = open(os.path.join(upload_full_path, upload.name+".raw"), 'wb+')
+        print (str(dest))
+        for chunk in upload.chunks():
+          dest.write(chunk)
+        dest.close()
 
-         reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
-         incdate = request.POST.get('date', False)
+        reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
+        incdate = request.POST.get('date', False)
 
 
-         inctime = request.POST.get('time', False)
-         loc = request.POST.get('location', 'none')
+        inctime = request.POST.get('time', False)
+        loc = request.POST.get('location', 'none')
 
-         timestamp = time.ctime()
+        timestamp = time.ctime()
 
-         if incdate and not inctime:
-             report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-         if incdate and inctime:
-             report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-         if not incdate and inctime:
-             report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-         if not incdate and not inctime:
-             report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+        tags = request.POST.get('tags') 
+        idnum = len(Report.objects.all())
+      
+        if incdate and not inctime:
+          report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+        if incdate and inctime:
+          report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+        if not incdate and inctime:
+          report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+        if not incdate and not inctime:
+          report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
 
-         report.save()
+        report.save()
 
-         encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
+        encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
 
-         os.remove(os.path.join(upload_dir, upload.name+".raw"))
+        os.remove(os.path.join(upload_dir, upload.name+".raw"))
 
-         return render(request, 'ReporterHomePage.html')
-     else:
+        return render(request, 'ReporterHomePage.html')
+      else:
          return render(request, 'ReporterHomePage.html')
 
 def adm(request):
@@ -156,7 +159,7 @@ def my_view(request):
       if user.is_active:
          login(request, user)
          reports = Report.objects.all()
-         return HttpResponseRedirect(reverse('Home'))         
+         return HttpResponseRedirect(reverse('Home'), {'firstname': request.user.username, 'reports': reports})         
          
       else:
          print("user is disabled")

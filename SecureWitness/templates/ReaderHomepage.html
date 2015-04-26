@@ -85,11 +85,11 @@
 
 <p>
 
-{% for r_field in reports %}
-<table>
+{% for report in reports %}
     
-    <tr><td><a href = "{% url "Report" %}?report={{r_field}}">{{r_field.title}}</a></td></tr> 
-</table>
+    
+<a href = "{% url 'Report' report.reportID %}">{{report.title}}</a><br>
+
 {% endfor %}
 
 </p>

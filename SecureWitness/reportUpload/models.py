@@ -7,18 +7,19 @@ class Report(models.Model):
         title = models.CharField(max_length=128)
         views = models.IntegerField(default=0)
         author = models.CharField(max_length=128)
-        date = models.CharField(max_length=128, default='none')
-        time = models.CharField(max_length=128, default='none')
-        url = models.URLField(default='bruh')
-        short = models.TextField(default='none')
-        longd = models.TextField(default='none')
-        location = models.TextField(default='none')
+        date = models.CharField(max_length=128, default='')
+        time = models.CharField(max_length=128, default='')
+        url = models.URLField(default='')
+        short = models.TextField(default='')
+        longd = models.TextField(default='')
+        location = models.TextField(default='')
         users = models.ManyToManyField(User, related_name='reports')
         groups = models.ManyToManyField(Group, related_name='reports')
         tags = models.TextField(default='')
+        reportID = models.IntegerField(default=0)
         
         def get_absolute_url(self):
-        	return urlresolvers.reverse('report', args=(self.title,))
+                return urlresolvers.reverse('report', args=(self.title,))
 
         def __str__(self):
                 return self.title
