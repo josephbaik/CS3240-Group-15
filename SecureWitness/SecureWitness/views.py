@@ -31,15 +31,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 def reporter(request):
 
-<<<<<<< HEAD
-    if request.method == 'POST':
-        author = str(request.user.username)
-        folder = request.POST.get('folder', '')
-        upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-        upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
-
-        if not os.path.exists(upload_full_path):
-=======
 
    
    if request.method == 'POST':
@@ -57,8 +48,7 @@ def reporter(request):
       
       
          if not os.path.exists(upload_full_path):
-            if request.user.has_perm('SecWit.add_page') is not True:
-               return render(request, 'invalidpermission.html')
+           
             if request.method == 'POST':
                if request.method == 'POST':
                   author = str(request.user.username)
@@ -115,7 +105,6 @@ def reporter(request):
          upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
       
          if not os.path.exists(upload_full_path):
->>>>>>> 8f51969ba8f684fd745b87999df721f7b42a8cec
             os.makedirs(upload_full_path)
          upload = request.FILES['myfile']
       
@@ -145,20 +134,6 @@ def reporter(request):
             report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
          if not incdate and not inctime:
             report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
-<<<<<<< HEAD
-
-        report.save()
-        report.users.add(request.user)
-        report.groups.add(Group.objects.get(name="admin"))
-
-        encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
-    
-        os.remove(os.path.join(upload_dir, upload.name+".raw"))
-
-        return render(request, 'ReporterHomePage.html')
-    else:
-        return render(request, 'ReporterHomePage.html')
-=======
       
          report.save()
       
@@ -169,30 +144,19 @@ def reporter(request):
          return render(request, 'ReporterHomePage.html')
       else:
          return render(request, 'ReporterHomePage.html')
->>>>>>> 8f51969ba8f684fd745b87999df721f7b42a8cec
         
         
         
         
 def adm(request):
-<<<<<<< HEAD
    if Group.objects.get(name="admin") in request.user.groups.all():
       return render(request, 'AdminHomePage.html')
    return render(request, 'invalidpermission.html')  
-=======
-   
-   return render(request, 'AdminHomePage.html')
-   
->>>>>>> 8f51969ba8f684fd745b87999df721f7b42a8cec
 
 
 
 
 def reader(request):
-<<<<<<< HEAD
-=======
-   
->>>>>>> 8f51969ba8f684fd745b87999df721f7b42a8cec
    reports = Report.objects.all()
    return render(request, 'ReaderHomepage.html', {'reports': reports})
 
@@ -215,13 +179,6 @@ def addUser(request):
    
    if(password == confirmpassword):
       user = User.objects.create_user(username, email, password)
-<<<<<<< HEAD
-=======
-      
-      
-      
->>>>>>> 8f51969ba8f684fd745b87999df721f7b42a8cec
-   
       return render(request, 'usercreated.html')
    else:
       raise ValidationError(password)
