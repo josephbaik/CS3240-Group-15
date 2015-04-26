@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 
 import login.views
+import SecureWitness.views
 
 urlpatterns = patterns('',
      #Examples:
@@ -23,8 +24,8 @@ urlpatterns = patterns('',
     url(r'^requestreports/?$', 'SecureWitness.views.requestreports', name = 'requestreports',),
     url(r'^requestlogin/?$', 'SecureWitness.views.login_user', name = 'requestlogin',),
     url(r'^newGroupPage/?$', 'SecureWitness.views.newGroupPage', name = 'newGroupPage',),
-    url(r'^addUserToGroupPage/?$', 'SecureWitness.views.addUserToGroupPage', name = 'addUserToGroupPage',),
     url(r'^createGroup/?$', 'SecureWitness.views.createGroup', name = 'createGroup',),
-    url(r'^addUserToGroup/?$', 'SecureWitness.views.addUserToGroup', name = 'addUserToGroup',)
+    url(r'^addUserToGroup/?$', 'SecureWitness.views.addUserToGroup', name = 'addUserToGroup',),
+    url(r'^addUserToGroupPage/?$', 'SecureWitness.views.addUserToGroupPage', name = 'addUserToGroupPage',),
 
 )

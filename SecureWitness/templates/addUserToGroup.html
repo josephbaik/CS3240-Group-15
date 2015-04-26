@@ -61,6 +61,18 @@
 
 <div id="section">
 
+<p>Groups that you're in: </p>
+
+
+{% if groups_that_user_is_in %}
+	<ul>
+{% for group in groups_that_user_is_in %}
+<li>{{group.name}}</li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
 <form action="/addUserToGroup/" method="post">{% csrf_token %}
 Group Name: <input type="text" name="groupname"><br>
 
