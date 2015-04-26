@@ -31,9 +31,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 def reporter(request):
 
-<<<<<<< HEAD
-   if request.user.has_perm('SecWit.add_page') is not True:
-      return render(request, 'invalidpermission.html')
+
+   
    if request.method == 'POST':
       if request.method == 'POST':
       
@@ -49,120 +48,117 @@ def reporter(request):
       
       
          if not os.path.exists(upload_full_path):
-             if request.user.has_perm('SecWit.add_page') is not True:
-                 return render(request, 'invalidpermission.html')
-             if request.method == 'POST':
-                 if request.method == 'POST':
-                   author = str(request.user.username)
-                   folder = request.POST.get('folder', '')
-                   upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-                   upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
-
-                   if not os.path.exists(upload_full_path):
+            if request.user.has_perm('SecWit.add_page') is not True:
+               return render(request, 'invalidpermission.html')
+            if request.method == 'POST':
+               if request.method == 'POST':
+                  author = str(request.user.username)
+                  folder = request.POST.get('folder', '')
+                  upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
+                  upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
+               
+                  if not os.path.exists(upload_full_path):
                      os.makedirs(upload_full_path)
-                   upload = request.FILES['myfile']
-            
-                   while os.path.exists(os.path.join(upload_full_path, upload.name)):
+                  upload = request.FILES['myfile']
+               
+                  while os.path.exists(os.path.join(upload_full_path, upload.name)):
                      upload.name = '_' + upload.name
                   dest = open(os.path.join(upload_full_path, upload.name+".raw"), 'wb+')
                   print (str(dest))
                   for chunk in upload.chunks():
                      dest.write(chunk)
                   dest.close()
-      
+               
                   reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
                   incdate = request.POST.get('date', False)
-      
-      
+               
+               
                   inctime = request.POST.get('time', False)
                   loc = request.POST.get('location', 'none')
-      
+               
                   timestamp = time.ctime()
             
-                 if incdate and not inctime:
-                    report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-                 if incdate and inctime:
-                    report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-                 if not incdate and inctime:
-                    report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-                 if not incdate and not inctime:
-                     report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
-         
-                  report.save()
-      
-                  encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
-      
-                  os.remove(os.path.join(upload_dir, upload.name+".raw"))
-      
-                  return render(request, 'ReporterHomePage.html')
+               if incdate and not inctime:
+                  report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+               if incdate and inctime:
+                  report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+               if not incdate and inctime:
+                  report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+               if not incdate and not inctime:
+                  report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc)
+            
+               report.save()
+            
+               encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
+            
+               os.remove(os.path.join(upload_dir, upload.name+".raw"))
+            
+               return render(request, 'ReporterHomePage.html')
    else:
       return render(request, 'ReporterHomePage.html')
-          dest.close()
-=======
-    if request.user.has_perm('SecWit.add_page') is not True:
-        return render(request, 'invalidpermission.html')
-    if request.method == 'POST':
-        author = str(request.user.username)
-        folder = request.POST.get('folder', '')
-        upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-        upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
-
-        if not os.path.exists(upload_full_path):
-            os.makedirs(upload_full_path)
-        upload = request.FILES['myfile']
+      dest.close()
+   
       
-        while os.path.exists(os.path.join(upload_full_path, upload.name)):
+      if request.method == 'POST':
+         author = str(request.user.username)
+         folder = request.POST.get('folder', '')
+         upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
+         upload_full_path = os.path.join(settings.MEDIA_ROOT, upload_dir)
+      
+         if not os.path.exists(upload_full_path):
+            os.makedirs(upload_full_path)
+         upload = request.FILES['myfile']
+      
+         while os.path.exists(os.path.join(upload_full_path, upload.name)):
             upload.name = '_' + upload.name
-        dest = open(os.path.join(upload_full_path, upload.name+".raw"), 'wb+')
-        print (str(dest))
-        for chunk in upload.chunks():
+         dest = open(os.path.join(upload_full_path, upload.name+".raw"), 'wb+')
+         print (str(dest))
+         for chunk in upload.chunks():
             dest.write(chunk)
->>>>>>> c2d14bfeee8a6e7b230e0bd3eb605ea74c3ca6a0
-
-        dest.close()
-
-        reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
-        incdate = request.POST.get('date', False)
-        inctime = request.POST.get('time', False)
-        loc = request.POST.get('location', 'none')
-
-        timestamp = time.ctime()
-
-        tags = request.POST.get('tags', '')
-
-        if incdate and not inctime:
+      
+         dest.close()
+      
+         reportdest = os.path.join(upload_full_path, author + '/' + folder + '/' + upload.name+".raw")
+         incdate = request.POST.get('date', False)
+         inctime = request.POST.get('time', False)
+         loc = request.POST.get('location', 'none')
+      
+         timestamp = time.ctime()
+      
+         tags = request.POST.get('tags', '')
+      
+         if incdate and not inctime:
             report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
-        if incdate and inctime:
+         if incdate and inctime:
             report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
-        if not incdate and inctime:
+         if not incdate and inctime:
             report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
-        if not incdate and not inctime:
+         if not incdate and not inctime:
             report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags)
-
-        report.save()
-
-        encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
-    
-        os.remove(os.path.join(upload_dir, upload.name+".raw"))
-
-        return render(request, 'ReporterHomePage.html')
-    else:
-        return render(request, 'ReporterHomePage.html')
+      
+         report.save()
+      
+         encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
+      
+         os.remove(os.path.join(upload_dir, upload.name+".raw"))
+      
+         return render(request, 'ReporterHomePage.html')
+      else:
+         return render(request, 'ReporterHomePage.html')
         
         
         
         
 def adm(request):
-   if request.user.has_perm('SecWit.manage_group'):
-      return render(request, 'AdminHomePage.html')
-   return render(request, 'invalidpermission.html')  
+   
+   return render(request, 'AdminHomePage.html')
+   
 
 
 
 
 def reader(request):
-   if request.user.has_perm('SecWit.add_page') is not True:
-      return render(request, 'invalidpermission.html')
+   
    reports = Report.objects.all()
    return render(request, 'ReaderHomepage.html', {'reports': reports})
 
@@ -187,10 +183,7 @@ def addUser(request):
       user = User.objects.create_user(username, email, password)
       
       
-      permission1 = Permission.objects.get(codename='add_page')
-      #permission2 = Permission.objects.get(codename='read_page')
-      user.user_permissions.add(permission1)
-      user.user_permissions.add(2)
+      
    
       return render(request, 'usercreated.html')
    else:
@@ -213,7 +206,6 @@ def my_view(request):
          print("user is disabled")
          return render(request, 'InvalidLogin.html')
 
-<<<<<<< HEAD
 
 def Reportview(request):
    return render(request, 'ReportView.html')
@@ -221,14 +213,12 @@ def Reportview(request):
 def Reportview(request):
    return render(request, 'ReportView.html')
 
-=======
 def Reportview(request, report=None):
-  report = urllib
-  if report == None:
-    return render(request, 'ReportView.html', {'rep': 'no report here!'})
-  else:
-    return render(request, 'ReportView.html', {'rep': report})
->>>>>>> c2d14bfeee8a6e7b230e0bd3eb605ea74c3ca6a0
+   report = urllib
+   if report == None:
+      return render(request, 'ReportView.html', {'rep': 'no report here!'})
+   else:
+      return render(request, 'ReportView.html', {'rep': report})
 
 def logout_view(request):
    logout(request)
