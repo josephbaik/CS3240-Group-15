@@ -59,15 +59,16 @@ def reporter(request):
 
         tags = request.POST.get('tags') 
         idnum = len(Report.objects.all())
+        address = 'files/' + author + '/' + folder + upload.name
       
         if incdate and not inctime:
-          report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+          report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
         if incdate and inctime:
-          report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+          report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
         if not incdate and inctime:
-          report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+          report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
         if not incdate and not inctime:
-          report = Report(title=request.POST['title'], author=author, url=upload_full_path, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+          report = Report(title=request.POST['title'], author=author, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
 
         report.save()
 
