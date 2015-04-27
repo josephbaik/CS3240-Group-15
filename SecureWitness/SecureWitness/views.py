@@ -13,6 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -31,6 +32,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 def reporter(request):
+      if not request.user.username:
+        return render(request, 'login.html')
+      if Group.objects.get(name="admin") in request.user.groups.all():
+        return render(request, 'AdminHomePage.html')
       if request.method == 'POST':
         author = str(request.user.username)
         folder = request.POST.get('folder', '')
@@ -89,15 +94,20 @@ def reporter(request):
         return render(request, 'ReporterHomePage.html')
 
 def adm(request):
-   if Group.objects.get(name="admin") in request.user.groups.all():
-      return render(request, 'AdminHomePage.html')
-   return render(request, 'invalidpermission.html')  
+  if not request.user.username:
+    return render(request, 'login.html')
+  if Group.objects.get(name="admin") in request.user.groups.all():
+    return render(request, 'AdminHomePage.html')
+  if Group.objects.get(name="admin") in request.user.groups.all():
+    return render(request, 'AdminHomePage.html')
+  return render(request, 'invalidpermission.html')  
 
 
 """Login/User Creation Process VIEWS"""
 
 def reader(request):
-   
+   if not request.user.username:
+    return render(request, 'login.html')
    reports = Report.objects.all()
    return render(request, 'ReaderHomepage.html', {'firstname': request.user.username, 'reports': reports})
 
@@ -158,30 +168,33 @@ def shareReport(request):
         rpt.users.add(us3r)
     return render(request, 'share.html')
         
-
 def my_view(request):
-   username = request.POST.get('username')
-   password = request.POST.get('password')
-   if not username or not password:
-      return HttpResponseRedirect(reverse('homepage'))
-   user = authenticate(username = username, password = password)
-   if user is not None:
-      if user.is_active:
-         login(request, user)
-         reports = Report.objects.all()
-         return HttpResponseRedirect(reverse('Home'), {'firstname': request.user.username, 'reports': reports})         
+  if Group.objects.get(name="admin") in request.user.groups.all():
+    return render(request, 'AdminHomePage.html')
+  username = request.POST.get('username')
+  password = request.POST.get('password')
+  if not username or not password:
+    return HttpResponseRedirect(reverse('homepage'))
+  user = authenticate(username = username, password = password)
+  if user is not None:
+    if user.is_active:
+      login(request, user)
+      reports = Report.objects.all()
+      return HttpResponseRedirect(reverse('Home'), {'firstname': request.user.username, 'reports': reports})         
          
-      else:
-         print("user is disabled")
-         return render(request, 'InvalidLogin.html')
+    else:
+      print("user is disabled")
+      return render(request, 'InvalidLogin.html')
 
 
 def Reportview(request, report=None):
-   report = urllib
-   if report == None:
-      return render(request, 'ReportView.html', {'rep': 'no report here!'})
-   else:
-      return render(request, 'ReportView.html', {'rep': report})
+  if Group.objects.get(name="admin") in request.user.groups.all():
+    return render(request, 'AdminHomePage.html')
+  report = urllib
+  if report == None:
+    return render(request, 'ReportView.html', {'rep': 'no report here!'})
+  else:
+    return render(request, 'ReportView.html', {'rep': report})
 
 def logout_view(request):
    logout(request)
@@ -205,46 +218,50 @@ def newGroupPage(request):
 
 
 def createGroup(request):
+  if Group.objects.get(name="admin") in request.user.groups.all():
+    return render(request, 'AdminHomePage.html')
 
-   groupname = request.POST.get('groupname')
-   if not groupname:
-      return HttpResponseRedirect(reverse('newGroupPage'))
-   group = Group.objects.create(name=groupname)
-   user = User.objects.get(username=request.user.username)
-   user.groups.add(group)
+  groupname = request.POST.get('groupname')
+  if not groupname:
+    return HttpResponseRedirect(reverse('newGroupPage'))
+  group = Group.objects.create(name=groupname)
+  user = User.objects.get(username=request.user.username)
+  user.groups.add(group)
    
-   return HttpResponseRedirect(reverse('addUserToGroupPage'))
-   reverse('addUserToGroupPage')
-   return render(request, 'addUserToGroup.html', {'groups_that_user_is_in': user.groups.all()})
+  return HttpResponseRedirect(reverse('addUserToGroupPage'))
+  reverse('addUserToGroupPage')
+  return render(request, 'addUserToGroup.html', {'groups_that_user_is_in': user.groups.all()})
 
 
 
 def addUserToGroupPage(request):
-   
-   user = User.objects.get(username=request.user.username)   
-   return render(request, 'addUserToGroup.html', {'groups_that_user_is_in': user.groups.all()})
+  if Group.objects.get(name="admin") in request.user.groups.all():
+    return render(request, 'AdminHomePage.html') 
+  user = User.objects.get(username=request.user.username)   
+  return render(request, 'addUserToGroup.html', {'groups_that_user_is_in': user.groups.all()})
    
 
 
 
 
 def addUserToGroup(request):
+  if Group.objects.get(name="admin") in request.user.groups.all():
+    return render(request, 'AdminHomePage.html')
 
-
-   username = request.POST.get('username')
-   groupname = request.POST.get('groupname')
+  username = request.POST.get('username')
+  groupname = request.POST.get('groupname')
    
    
-   if(Group.objects.filter(name__icontains=groupname) and User.objects.filter(username__contains=username)):
-       group = Group.objects.get(name=groupname)   
-       user = User.objects.get(username=username)
+  if(Group.objects.filter(name__icontains=groupname) and User.objects.filter(username__contains=username)):
+    group = Group.objects.get(name=groupname)   
+    user = User.objects.get(username=username)
    
-       loggedinUser = User.objects.get(username = request.user.username)
+    loggedinUser = User.objects.get(username = request.user.username)
    
-       if group in loggedinUser.groups.all():   
-         user.groups.add(group)
+    if group in loggedinUser.groups.all():   
+      user.groups.add(group)
    
-   return HttpResponseRedirect(reverse('addUserToGroupPage'))
+  return HttpResponseRedirect(reverse('addUserToGroupPage'))
    
    
 
@@ -261,6 +278,7 @@ def requestgroups(request):
    return JsonResponse(list)
 
 def requestreports(request):
+
    list = {'reports' : []}
    hasPrinted = False
    for g in Report.objects.all():

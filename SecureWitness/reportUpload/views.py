@@ -23,6 +23,8 @@ def search(request):
 
 @csrf_exempt
 def seereport(request, report_id=None):
+    if not request.user.username:
+        return render(request, 'login.html')
     author = str(request.user.username)
 
     if report_id == None:
@@ -48,6 +50,8 @@ def seereport(request, report_id=None):
         return render_to_response('ReportView.html', {'report' : Report.objects.get(reportID=report_id)})
 
 def editreport(request, report_id):
+    if not request.user.username:
+        return render(request, 'login.html')
     report = Report.objects.get(pk=report_id)
     print ('entering edit report')
     if request.method == 'POST':
@@ -77,6 +81,8 @@ def editreport(request, report_id):
     return render(request, 'editReport.html', {'report': report, 'firstname':request.user.username})
 
 def seemine(request):
+    if not request.user.username:
+        return render(request, 'login.html')
     author = str(request.user.username)
     if author == None:
         return render(request, 'myreports.html', {'reports': 'no report here!'})
