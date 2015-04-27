@@ -1,8 +1,10 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.core.urlresolvers import reverse
+from django.conf.urls.static import static
 
 import login.views
+from SecureWitness import settings
 import SecureWitness.views
 
 urlpatterns = patterns('',
@@ -31,5 +33,8 @@ urlpatterns = patterns('',
     url(r'^addUserToGroupPage/?$', 'SecureWitness.views.addUserToGroupPage', name = 'addUserToGroupPage',),
     url(r'^searchForReports/?$', 'SecureWitness.views.searchForReports', name = 'searchForReports',),
     url(r'^listGroupsAndUsers/?$', 'SecureWitness.views.listGroupsAndUsers', name = 'listGroupsAndUsers',),
-    # url(r'^reportview/(?P<report>\w+)/$', 'app.views.Reportview', name='report'),
+
 )
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

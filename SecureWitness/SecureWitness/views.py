@@ -59,7 +59,7 @@ def reporter(request):
 
         tags = request.POST.get('tags') 
         idnum = len(Report.objects.all())
-        address = 'files/' + author + '/' + folder + upload.name
+        address = settings.MEDIA_URL + author + '/' + folder + upload.name
       
         if incdate and not inctime:
           report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
