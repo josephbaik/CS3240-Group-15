@@ -77,8 +77,10 @@ def reporter(request):
           report = Report(title=request.POST['title'], author=author, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey)
 
         report.save()
+        report.users.add(request.user)
+        report.groups.add(Group.objects.get(name="admin"))
 
-        encrypt_file("aaaaaaaaaaaaaaaa", os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
+        encrypt_file(report.enckey, os.path.join(upload_full_path, upload.name+".raw"), os.path.join(upload_full_path, upload.name))
 
         os.remove(os.path.join(upload_dir, upload.name+".raw"))
 
@@ -249,7 +251,7 @@ def addUserToGroup(request):
 
 
 
-"""------------------------------------------------"""
+"""-------------------CLIENT-SIDE LINKS------------------------"""
 
 
 def requestgroups(request):
@@ -272,6 +274,33 @@ def requestreports(request):
                    list['reports'].append(g.title)
    return JsonResponse(list)
 
+def requesturls(request):
+   list = {}
+   hasPrinted = False
+   for g in Report.objects.all():
+       for u in g.users.all():
+           if u.username == request.user.username:
+               list[g.title.encode("utf-8")] = g.url
+               hasPrinted = True
+       if not hasPrinted:
+           for u in g.groups.all():
+               if u in request.user.groups.all():
+                   list[g.title.encode("utf-8")] = g.url
+   return JsonResponse(list)
+
+def requestkeys(request):
+   list = {}
+   hasPrinted = False
+   for g in Report.objects.all():
+       for u in g.users.all():
+           if u.username == request.user.username:
+               list[g.title.encode("utf-8")] = g.enckey
+               hasPrinted = True
+       if not hasPrinted:
+           for u in g.groups.all():
+               if u in request.user.groups.all():
+                   list[g.title.encode("utf-8")] = g.enckey
+   return JsonResponse(list)
 
 
 """-------------------SEARCH------------------------"""
