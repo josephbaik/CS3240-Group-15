@@ -82,7 +82,7 @@ def reporter(request):
 
         return render(request, 'ReporterHomePage.html')
       else:
-         return render(request, 'ReporterHomePage.html')
+        return render(request, 'ReporterHomePage.html')
 
 def adm(request):
    if Group.objects.get(name="admin") in request.user.groups.all():

@@ -69,12 +69,19 @@
 
 {% for report in reports %}
     
+<form action='POST' >
+
+<a href = "{% url 'Report' report.reportID %}">{{report.title}}</a>
+
     
-<a href = "{% url 'Report' report.reportID %}">{{report.title}}</a><br>
+</form>
+
+
 
 {% endfor %}
 
 </p>
+
 
 </br>
 </br>

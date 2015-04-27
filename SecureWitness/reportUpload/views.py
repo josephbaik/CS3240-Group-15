@@ -1,5 +1,8 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, HttpResponseRedirect
 from reportUpload.models import Report
+from django.core.urlresolvers import reverse
+
+from SecureWitness import views
 
 
 # Create your views here.
@@ -17,14 +20,23 @@ def search(request):
     return render(request, 'rango/search.html', {'result_list': result_list})
 
 def seereport(request, report_id=None):
-	print (report_id)
-	if report_id == None:
-		return render(request, 'ReportView.html', {'report': 'no report here!'})
-	return render_to_response('ReportView.html', {'report' : Report.objects.get(reportID=report_id)})
+    author = str(request.user.username)
+
+    if report_id == None:
+        return render(request, 'ReportView.html', {'report': 'no report here!'})
+    report = Report.objects.get(reportID=report_id)
+    print ('Delete' in request.POST)
+    if 'delete' in request.POST:
+        print('button has been pressed')
+        report.delete()
+        return render(request, 'SecureWitness/ReaderHomepage.html', {'reports': Report.objects.all(), 'username': author})
+    else:
+        return render_to_response('ReportView.html', {'report' : Report.objects.get(reportID=report_id)})
+
 
 def seemine(request):
     author = str(request.user.username)
     if author == None:
         return render(request, 'myreports.html', {'reports': 'no report here!'})
-    
+
     return render(request, 'myreports.html', {'firstname': author, 'reports': Report.objects.filter(author=author)})
