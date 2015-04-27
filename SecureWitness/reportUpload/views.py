@@ -29,16 +29,52 @@ def seereport(request, report_id=None):
         return render(request, 'ReportView.html', {'report': 'no report here!'})
     report = Report.objects.get(reportID=report_id)
     # print (request.POST.get('delete'))
+    report.views += 1
     if request.method == 'POST':
-        print('button has been pressed')
+        if request.POST.get('delete') == 'Delete':
+            print('delete button has been pressed')
+        if request.POST.get('edit') == 'Edit':
+            print('edit button has been pressed')
         if author == report.author:
-            report.delete()
-            return render(request, 'ReaderHomepage.html', {'reports': Report.objects.all(), 'username': author})
+            if request.POST.get('delete') == 'Delete':
+                report.delete()
+                return render(request, 'ReaderHomepage.html', {'reports': Report.objects.all(), 'username': author})
+            if request.POST.get('edit') == 'Edit':
+                print ('rendering editreport')
+                return HttpResponseRedirect('/edit/'+str(report.id))
         else:
             return render(request, 'invalidpermission.html')
     else:
         return render_to_response('ReportView.html', {'report' : Report.objects.get(reportID=report_id)})
 
+def editreport(request, report_id):
+    report = Report.objects.get(pk=report_id)
+    print ('entering edit report')
+    if request.method == 'POST':
+        print ('submit button pressed')
+        title = request.POST.get('title', '')
+        if title != '':
+            report.title = title
+        location = request.POST.get('location', '')
+        if location != '':
+            report.location = location
+        longd = request.POST.get('longdescription', '')
+        if longd != '':
+            report.longd = longd
+        shortd = request.POST.get('shortdescription', '')
+        if shortd != '':
+            report.shortd = shortd
+        tags = request.POST.get('tags', '')
+        if tags != '':
+            report.tags = tags
+        enckey = request.POST.get('enckey', '')
+        if enckey != '':
+            report.enckey = enckey
+
+        report.save()
+        return render(request, 'ReaderHomepage.html', {'reports': Report.objects.all() , 'firstname': request.user.username})
+    
+    return render(request, 'editReport.html', {'report': report, 'firstname':request.user.username})
 
 def seemine(request):
     author = str(request.user.username)

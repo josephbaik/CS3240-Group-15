@@ -1,4 +1,5 @@
 <html>
+
 <head>
 <style>
 #header {
@@ -29,7 +30,6 @@
 }
 </style>
 </head>
-
 <body>
 
 <div id="header">
@@ -55,24 +55,37 @@
 <form action="{% url "listGroupsAndUsers" %}">
 <button type="grouplist">Groups and Users</button>
 </form>
-
+<form action="{% url "SharingPage" %}">
+<button type="SharingPage">Share Your Reports</button>
+</form>
 </div>
 
 <div id="section">
-	
-    
-    <form method="post" enctype="multipart/form-data">{% csrf_token %}
-    <h1>{{report.title}}</h1><br>
-    <p>{{report.author}}  {{report.date}}</p>
-    <p>{{report.longd}}</p>
 
+
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
+    Editing: {{report.title}}
+    <p>
+    Title:
+    <input type="text" name="title"/><br>
+
+         Location: <input type="text" name="location"/><br>
+    Short Description:<br>
+    <textarea name="shortdescription" cols="40" rows="1" ... ></textarea>
+    <br>
+
+    Long Description: <br>
+
+    <textarea name="longdescription" cols="40" rows="5" ... ></textarea>
+    </p>
+
+    Tags:
+    <input type="text" name="tags"/><br>
     
-    <a href = "{{report.url}}" download="">Download Attachment</a>
-    <input type="submit" name="edit" Value='Edit'/>
-    <input type="submit" name="delete" Value='Delete'/>
-    
-    </form>
-</div>
+    Encryption Key:
+    <input type="text" name="enckey"/><br>
+    <input type="submit" name="submit" value="Submit" />
+</form></div>
 
 <div id="footer">
 Developed by Joseph Baik
