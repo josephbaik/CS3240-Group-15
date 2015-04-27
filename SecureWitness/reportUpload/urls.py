@@ -11,4 +11,5 @@ urlpatterns = patterns('',
 	    # url(r'^get)/$', 'SecureWitness.views.Reportview', name='Report'),
 	url(r'^get/(?P<report_id>[\w.@+-]+)/$', 'reportUpload.views.seereport', name='Report'),
 	url(r'^all/$', 'SecureWitness.views.reader', name='read'),
+	url(r'^mine/$', 'reportUpload.views.seemine', name='myreports'),
 )

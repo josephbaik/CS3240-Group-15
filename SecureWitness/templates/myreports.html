@@ -1,4 +1,6 @@
+<!DOCTYPE html>
 <html>
+
 <head>
 <style>
 #header {
@@ -13,19 +15,19 @@
     height:300px;
     width:100px;
     float:left;
-    padding:5px;	      
+    padding:5px;          
 }
 #section {
     width:350px;
     float:left;
-    padding:10px;	 	 
+    padding:10px;        
 }
 #footer {
     background-color:green;
     color:white;
     clear:both;
     text-align:center;
-   padding:5px;	 	 
+   padding:5px;      
 }
 </style>
 </head>
@@ -55,14 +57,28 @@
 <form action="{% url "listGroupsAndUsers" %}">
 <button type="grouplist">Groups and Users</button>
 </form>
-
+<form action="{% url "SharingPage" %}">
+<button type="SharingPage">Share Your Reports</button>
+</form>
 </div>
 
 <div id="section">
-	<h1>{{report.title}}</h1><br>
-    <p>{{report.author}}  {{report.date}}</p>
-    <p>{{report.longd}}</p>
-    <a href = "{{report.url}}" download="">Download Attachment</a>
+<h2>{{firstname}}'s reports</h2>
+
+<p>
+
+{% for report in reports %}
+    
+    
+<a href = "{% url 'Report' report.reportID %}">{{report.title}}</a><br>
+
+{% endfor %}
+
+</p>
+
+</br>
+</br>
+<a href = "{% url "logout" %}">Log Out</a>
 </div>
 
 <div id="footer">
