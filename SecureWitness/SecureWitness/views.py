@@ -24,7 +24,7 @@ from SecureWitness.Encrypter import encrypt_file
 
 from datetime import date, timedelta
 import time
-from reportUpload.models import Report
+from reportUpload.models import Report, Folder
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -32,6 +32,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 def reporter(request):
+      
+
       if not request.user.username:
         return render(request, 'login.html')
       if Group.objects.get(name="admin") in request.user.groups.all():

@@ -75,10 +75,16 @@ def editreport(request, report_id):
         if enckey != '':
             report.enckey = enckey
 
+        author = str(request.user.username)
+        folder = request.POST.get('folder', '')
+        if folder != '':
+            upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
+
         report.save()
         return render(request, 'ReaderHomepage.html', {'reports': Report.objects.all() , 'firstname': request.user.username})
     
     return render(request, 'editReport.html', {'report': report, 'firstname':request.user.username})
+
 
 def seemine(request):
     if not request.user.username:
@@ -88,3 +94,6 @@ def seemine(request):
         return render(request, 'myreports.html', {'reports': 'no report here!'})
 
     return render(request, 'myreports.html', {'firstname': author, 'reports': Report.objects.filter(author=author)})
+
+
+

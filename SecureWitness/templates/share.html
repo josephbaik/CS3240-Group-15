@@ -1,66 +1,5 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-<style>
-#header {
-    background-color:green;
-    color:white;
-    text-align:center;
-    padding:5px;
-}
-#nav {
-    line-height:30px;
-    background-color:#eeeeee;
-    height:300px;
-    width:100px;
-    float:left;
-    padding:5px;	      
-}
-#section {
-    width:350px;
-    float:left;
-    padding:10px;	 	 
-}
-#footer {
-    background-color:green;
-    color:white;
-    clear:both;
-    text-align:center;
-   padding:5px;	 	 
-}
-</style>
-</head>
-
-<body>
-
-<div id="header">
-<h1>Secure Witness</h1>
-</div>
-
-<div id="nav">
-<form action="{% url "Home" %}">
-<button type="Home">Home</button>
-</form>
-<form action="{% url "myreports" %}">
-<button type="Home">My Reports</button>
-</form>
-<form action="{% url "reporterHome" %}">
-<button type="Reporter">Add Files</button>
-</form>
-<form action="{% url "newGroupPage" %}">
-<button type="CreateGroup">Create Group</button>
-</form>
-<form action="{% url "addUserToGroupPage" %}">
-<button type="addUserToGroupPage">Manage Groups</button>
-</form>
-<form action="{% url "listGroupsAndUsers" %}">
-<button type="grouplist">Groups and Users</button>
-</form>
-<form action="{% url "SharingPage" %}">
-<button type="SharingPage">Share Your Reports</button>
-</form>
-</div>
+{% extends 'template.html' %}
+{% block content %}
 
 <div id="section">
 
@@ -90,14 +29,6 @@ User To Share with (Blank if none): <input type="text" name="user"><br>
 
 
 </br>
-</br>
-<a href = "{% url "logout" %}">Log Out</a>
 
 </div>
-
-<div id="footer">
-Developed by Ben Gilbert (Ha, got 'em)
-</div>
-
-</body>
-</html>
+{% endblock content %}

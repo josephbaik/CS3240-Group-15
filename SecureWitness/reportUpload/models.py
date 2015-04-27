@@ -3,6 +3,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.core import urlresolvers
 # Create your models here.
+
+class Folder(models.Model):
+        root = models.ForeignKey('self', null=True)
+        user = models.ForeignKey(User)
+        name = models.CharField(max_length=200)
+
 class Report(models.Model):
         title = models.CharField(max_length=128)
         views = models.IntegerField(default=0)
@@ -18,6 +24,7 @@ class Report(models.Model):
         tags = models.TextField(default='')
         reportID = models.TextField(default='0000')
         enckey = models.CharField(max_length=516, default='')
+        folder = models.ForeignKey(Folder, null=True)
         
         def get_absolute_url(self):
                 return urlresolvers.reverse('report', args=(self.title,))
