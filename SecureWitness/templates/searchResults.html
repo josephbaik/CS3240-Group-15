@@ -70,14 +70,16 @@
 {% for report in report_containing_keywords %}
 <table>
     
-    <tr><td><a href = "{% url "Report" %}?report={{report}}">{{report.title}}</a></td></tr> 
+    <tr><td><a href = "{% url 'Report' report.reportID %}?report={{report}}">{{report.title}}</a></td></tr> 
 </table>
 {% endfor %}
 {% else %}
 	<p>No articles match your query</p>
 {% endif %}
 
-
+</br>
+</br>
+<a href = "{% url "Home" %}">Back</a>
 
 </br>
 </br>
