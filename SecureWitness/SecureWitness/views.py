@@ -59,6 +59,7 @@ def reporter(request):
         timestamp = time.ctime()
 
         tags = request.POST.get('tags') 
+        enckey = request.POST.get('enckey')
         idnum = str(len(Report.objects.all())) + str(upload.name)
         if folder != "":
           address = settings.MEDIA_URL + author + '/' + folder + '/' + upload.name
@@ -67,13 +68,13 @@ def reporter(request):
 
       
         if incdate and not inctime:
-          report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+          report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey)
         if incdate and inctime:
-          report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+          report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey)
         if not incdate and inctime:
-          report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+          report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey)
         if not incdate and not inctime:
-          report = Report(title=request.POST['title'], author=author, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum)
+          report = Report(title=request.POST['title'], author=author, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey)
 
         report.save()
 
