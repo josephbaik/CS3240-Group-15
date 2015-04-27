@@ -31,8 +31,11 @@ def seereport(request, report_id=None):
     # print (request.POST.get('delete'))
     if request.method == 'POST':
         print('button has been pressed')
-        report.delete()
-        return render(request, 'ReaderHomepage.html', {'reports': Report.objects.all(), 'username': author})
+        if author == report.author:
+            report.delete()
+            return render(request, 'ReaderHomepage.html', {'reports': Report.objects.all(), 'username': author})
+        else:
+            return render(request, 'invalidpermission.html')
     else:
         return render_to_response('ReportView.html', {'report' : Report.objects.get(reportID=report_id)})
 
