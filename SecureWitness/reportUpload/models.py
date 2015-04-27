@@ -16,7 +16,7 @@ class Report(models.Model):
         users = models.ManyToManyField(User, related_name='reports')
         groups = models.ManyToManyField(Group, related_name='reports')
         tags = models.TextField(default='')
-        reportID = models.IntegerField(default=0)
+        reportID = models.TextField(default='0000')
         
         def get_absolute_url(self):
                 return urlresolvers.reverse('report', args=(self.title,))
