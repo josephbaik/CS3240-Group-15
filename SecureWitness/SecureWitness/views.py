@@ -17,10 +17,11 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
+import datetime
 
 from SecureWitness.Encrypter import encrypt_file
 
-from datetime import date
+from datetime import date, timedelta
 import time
 from reportUpload.models import Report
 import os
@@ -158,7 +159,8 @@ def shareReport(request):
 def my_view(request):
    username = request.POST.get('username')
    password = request.POST.get('password')
-  
+   if not username or not password:
+      return HttpResponseRedirect(reverse('homepage'))
    user = authenticate(username = username, password = password)
    if user is not None:
       if user.is_active:
@@ -277,7 +279,31 @@ def requestreports(request):
 def searchForReports(request):
 
    keyword = request.POST.get('query')
-   q = Report.objects.filter(title__icontains=keyword)
+   tags = request.POST.get('tags')
+   today = request.POST.get('today')
+   last5 = request.POST.get('last5')
+   last10 = request.POST.get('last10')
+   lastmonth = request.POST.get('lastmonth')
+   forever = request.POST.get('forever')
+   q = Report.objects
+   
+   if not keyword and not today and not last5 and not last10 and not lastmonth and not forever and not tags:
+      return HttpResponseRedirect(reverse('Home'))
+   if keyword:
+      q = q.filter(title__icontains=keyword)
+   if tags:
+      q = q.filter(tags__icontains=tags)
+   if today:
+      q = q.filter(date__lte=datetime.date.today())
+   if last5:
+      q = q.filter(date__lte=datetime.date.today()-timedelta(days=5))
+   if last10:
+      q = q.filter(date__lte=datetime.date.today()-timedelta(days=10))
+   if lastmonth:
+      q = q.filter(date__lte=datetime.date.today()-timedelta(days=30))
+   if forever:
+      q = q.filter(date__lte=datetime.date.today()-timedelta(days=9999))
+   
    
    return render(request, 'searchResults.html', {'report_containing_keywords': q})
    
@@ -290,8 +316,8 @@ def listGroupsAndUsers(request):
  
    groups = request.user.groups.all()
    a = []
-   #for g in groups:
-   #   a.add(g.user_set.all())
+   for g in groups:
+      a += g.user_set.all()
    return render(request, 'groupanduserlists.html', {'list_of_groups': groups, 'users': a})
    
 
