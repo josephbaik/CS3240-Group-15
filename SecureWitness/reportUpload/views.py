@@ -1,6 +1,8 @@
 from django.shortcuts import render, render_to_response, HttpResponseRedirect
 from reportUpload.models import Report
 from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import csrf_exempt
+
 
 from SecureWitness import views
 
@@ -19,17 +21,18 @@ def search(request):
 
     return render(request, 'rango/search.html', {'result_list': result_list})
 
+@csrf_exempt
 def seereport(request, report_id=None):
     author = str(request.user.username)
 
     if report_id == None:
         return render(request, 'ReportView.html', {'report': 'no report here!'})
     report = Report.objects.get(reportID=report_id)
-    print ('Delete' in request.POST)
-    if 'delete' in request.POST:
+    # print (request.POST.get('delete'))
+    if request.method == 'POST':
         print('button has been pressed')
         report.delete()
-        return render(request, 'SecureWitness/ReaderHomepage.html', {'reports': Report.objects.all(), 'username': author})
+        return render(request, 'ReaderHomepage.html', {'reports': Report.objects.all(), 'username': author})
     else:
         return render_to_response('ReportView.html', {'report' : Report.objects.get(reportID=report_id)})
 
