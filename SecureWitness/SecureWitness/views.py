@@ -392,8 +392,8 @@ def listGroupsAndUsers(request):
    users = User.objects.all()
 
    if request.method == 'POST':
-    baduser = str(request.POST.get('suspend'))
-    g = Group.objects.get(name='suspend')
+    baduser = User.objects.get(username=str(request.POST.get('suspend'))[8:])
+    g = Group.objects.get(name='suspended')
     g.user_set.add(baduser)
 
    return render(request, 'groupanduserlists.html', { 'users': users})
