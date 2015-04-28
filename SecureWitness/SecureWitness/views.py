@@ -33,7 +33,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 def reporter(request):
       
-
+      if Group.objects.get(name="suspended") in request.user.groups.all():
+        return render(request, 'Suspended.html')
       if not request.user.username:
         return render(request, 'login.html')
       if request.method == 'POST':
@@ -102,6 +103,9 @@ def adm(request):
 """Login/User Creation Process VIEWS"""
 
 def reader(request):
+
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
    if not request.user.username:
     return render(request, 'login.html')
    reports = Report.objects.all()
@@ -109,12 +113,18 @@ def reader(request):
 
 
 def firstscreen(request):
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+       return render(request, 'Suspended.html')
    return render(request, 'login.html')
 
 def register(request):
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+       return render(request, 'Suspended.html')
    return render(request, 'register.html')
 
 def addUser(request):
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+       return render(request, 'Suspended.html')
    username = request.POST.get('username')
    email = request.POST.get('email')
    password = request.POST.get('password')
@@ -124,11 +134,12 @@ def addUser(request):
       user = User.objects.create_user(username, email, password)
       return render(request, 'usercreated.html')
    else:
-      raise ValidationError(password)
       return render(request, 'register.html')
 
 def SharingPage(request):
-    return render(request, 'share.html')
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+       return render(request, 'Suspended.html')
+   return render(request, 'share.html')
 
 def shareReport(request):
     rep = False
@@ -165,6 +176,8 @@ def shareReport(request):
     return render(request, 'share.html')
         
 def my_view(request):
+  if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
   username = request.POST.get('username')
   password = request.POST.get('password')
   if not username or not password:
@@ -182,7 +195,6 @@ def my_view(request):
 
 
 def Reportview(request, report=None):
-  report = urllib
   if report == None:
     return render(request, 'ReportView.html', {'rep': 'no report here!'})
   else:
@@ -194,6 +206,8 @@ def logout_view(request):
 
 @csrf_exempt
 def login_user(request):
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
    username = request.POST['username']
    password=request.POST['password']
    user = authenticate(username=username, password=password)
@@ -233,7 +247,8 @@ def addUserToGroupPage(request):
 
 
 def addUserToGroup(request):
-
+  if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
   username = request.POST.get('username')
   groupname = request.POST.get('groupname')
    
