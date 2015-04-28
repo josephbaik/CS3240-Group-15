@@ -33,6 +33,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 def reporter(request):
+<<<<<<< HEAD
       
       
       
@@ -44,6 +45,13 @@ def reporter(request):
         return HttpResponseRedirect(reverse('Home'))
       
 
+=======
+
+      if not request.user.username:
+        return render(request, 'login.html')
+      if Group.objects.get(name="suspended") in request.user.groups.all():
+        return render(request, 'Suspended.html')
+>>>>>>> c73ef079e237f051ba55fb4e058018966df8c18c
       if request.method == 'POST':
         author = str(request.user.username)
         folder = request.POST.get('folder', '')
@@ -116,6 +124,8 @@ def adm(request):
 def reader(request):
    if not request.user.username:
     return render(request, 'login.html')
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
    reports = Report.objects.all()
    return render(request, 'ReaderHomepage.html', {'firstname': request.user.username, 'reports': reports})
 
@@ -146,11 +156,17 @@ def addUser(request):
       user = User.objects.create_user(username, email, password)
       return render(request, 'usercreated.html')
    else:
+<<<<<<< HEAD
       badpass = True
       return render(request, 'register.html', {'badpass': badpass})
+=======
+      return render(request, 'register.html')
+>>>>>>> c73ef079e237f051ba55fb4e058018966df8c18c
 
 def SharingPage(request):
-    return render(request, 'share.html')
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+       return render(request, 'Suspended.html')
+   return render(request, 'share.html')
 
 def shareReport(request):
     rep = False
@@ -187,12 +203,19 @@ def shareReport(request):
     return render(request, 'share.html')
         
 def my_view(request):
+<<<<<<< HEAD
 
+=======
+  if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
+>>>>>>> c73ef079e237f051ba55fb4e058018966df8c18c
   username = request.POST.get('username')
   password = request.POST.get('password')
   if not username or not password:
     return HttpResponseRedirect(reverse('homepage'))
   user = authenticate(username = username, password = password)
+  if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
   if user is not None:
     if user.is_active:
       login(request, user)
@@ -205,8 +228,11 @@ def my_view(request):
 
 
 def Reportview(request, report=None):
+<<<<<<< HEAD
 
   report = urllib
+=======
+>>>>>>> c73ef079e237f051ba55fb4e058018966df8c18c
   if report == None:
     return render(request, 'ReportView.html', {'rep': 'no report here!'})
   else:
@@ -219,10 +245,14 @@ def logout_view(request):
 
 @csrf_exempt
 def login_user(request):
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
    username = request.POST['username']
    password=request.POST['password']
    user = authenticate(username=username, password=password)
    login(request, user)
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+    logout(request)
    return render(request, 'ReaderHomepage.html', {'firstname': request.user.username})
 
 
@@ -262,8 +292,13 @@ def addUserToGroupPage(request):
 
 
 def addUserToGroup(request):
+<<<<<<< HEAD
 
 
+=======
+  if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
+>>>>>>> c73ef079e237f051ba55fb4e058018966df8c18c
   username = request.POST.get('username')
   groupname = request.POST.get('groupname')
    
