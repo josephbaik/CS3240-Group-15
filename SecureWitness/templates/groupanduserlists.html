@@ -11,10 +11,19 @@
 
 <p>
 
-{% for user in users %}
+Unbanned Users<br>
+{% for user in goodusers %}
 <form method="post" enctype="multipart/form-data">{% csrf_token %}
 
 <input type="submit" name='suspend' Value='Suspend {{user.username}}'/>
+</form>
+{% endfor %}
+
+Banned Users<br>
+{% for user in badusers %}
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
+
+<input type="submit" name='unsuspend' Value='Unsuspend {{user.username}}'/>
 </form>
 {% endfor %}
 

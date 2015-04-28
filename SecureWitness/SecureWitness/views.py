@@ -389,13 +389,34 @@ def listGroupsAndUsers(request):
   if Group.objects.get(name='admin') in request.user.groups.all():
  
    
-   users = User.objects.all()
+    users = User.objects.all()
+    badusers = []
+    goodusers = []
 
-   if request.method == 'POST':
-    baduser = User.objects.get(username=str(request.POST.get('suspend'))[8:])
-    g = Group.objects.get(name='suspended')
-    g.user_set.add(baduser)
+    for user in users:
+      if Group.objects.get(name='suspended') in user.groups.all():
+        badusers.append(user)
+      else:
+        goodusers.append(user)
 
-   return render(request, 'groupanduserlists.html', { 'users': users})
+    print (goodusers)
+    print (badusers)
+    
+    if request.method == 'POST':
+      goodusername = request.POST.get('unsuspend', '')
+      badusername = request.POST.get('suspend', '')
+      g = Group.objects.get(name='suspended')
+      if badusername != '':
+        badusername = badusername[8:]
+        baduser = User.objects.get(username=badusername)
+        g.user_set.add(baduser)
+      
+      if goodusername != '':
+        goodusername = goodusername[10:]
+        gooduser = User.objects.get(username=goodusername)
+        g.user_set.remove(gooduser)
+
+    return render(request, 'groupanduserlists.html', {'goodusers': goodusers, 'badusers': badusers})
+  return render(request, 'ReaderHomepage.html', {'firstname': request.user.username, 'reports':Report.objects.all()})
    
 
