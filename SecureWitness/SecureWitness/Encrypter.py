@@ -28,7 +28,7 @@ def encrypt_file(key, in_filename, out_filename=None, chunksize=64*1024):
 
     iv = os.urandom(16)
     h = SHA256.new()
-    h.update(data=key)
+    h.update(data=key.encode('UTF-8'))
     encryptor = AES.new(h.hexdigest()[:16], AES.MODE_CBC, iv)
     filesize = os.path.getsize(in_filename)
 
