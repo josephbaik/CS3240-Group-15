@@ -27,6 +27,12 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+EMAIL_USE_TLS = True 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'securewitness15@gmail.com'
+EMAIL_HOST_PASSWORD = 'supersecure'
+EMAIL_PORT = 587
+
 
 # Application definition
 

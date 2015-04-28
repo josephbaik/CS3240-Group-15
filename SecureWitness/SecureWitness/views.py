@@ -19,6 +19,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 import datetime
+from django.core.mail import send_mail
 
 from SecureWitness.Encrypter import encrypt_file
 
@@ -33,11 +34,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 def reporter(request):
       
-
+      
+      
+      
       if not request.user.username:
         return render(request, 'login.html')
-      if Group.objects.get(name="admin") in request.user.groups.all():
-        return render(request, 'AdminHomePage.html')
+        
+      if Group.objects.get(name="admin") not in request.user.groups.all() and Group.objects.get(name="reporters") not in request.user.groups.all():
+        return HttpResponseRedirect(reverse('Home'))
+      
       if request.method == 'POST':
         author = str(request.user.username)
         folder = request.POST.get('folder', '')
@@ -98,10 +103,8 @@ def reporter(request):
 def adm(request):
   if not request.user.username:
     return render(request, 'login.html')
-  if Group.objects.get(name="admin") in request.user.groups.all():
-    return render(request, 'AdminHomePage.html')
-  if Group.objects.get(name="admin") in request.user.groups.all():
-    return render(request, 'AdminHomePage.html')
+  
+  
   return render(request, 'invalidpermission.html')  
 
 
@@ -126,12 +129,22 @@ def addUser(request):
    password = request.POST.get('password')
    confirmpassword = request.POST.get('confirmpassword')
    
+   if "@" not in email:
+      bademail = True
+      return render(request, 'register.html', {'bademail': bademail})
+   
+   subject = 'Thanks for registering at SecureWitness!'
+   message = 'Welcome to SecureWitness! We love you for signing up!'
+   from_email = settings.EMAIL_HOST_USER
+   to_list = [email]
+   
+   send_mail(subject, message, from_email, to_list, fail_silently=True)
    if(password == confirmpassword):
       user = User.objects.create_user(username, email, password)
       return render(request, 'usercreated.html')
    else:
-      raise ValidationError(password)
-      return render(request, 'register.html')
+      badpass = True
+      return render(request, 'register.html', {'badpass': badpass})
 
 def SharingPage(request):
     return render(request, 'share.html')
@@ -171,8 +184,8 @@ def shareReport(request):
     return render(request, 'share.html')
         
 def my_view(request):
-  if Group.objects.get(name="admin") in request.user.groups.all():
-    return render(request, 'AdminHomePage.html')
+  
+  
   username = request.POST.get('username')
   password = request.POST.get('password')
   if not username or not password:
@@ -190,13 +203,13 @@ def my_view(request):
 
 
 def Reportview(request, report=None):
-  if Group.objects.get(name="admin") in request.user.groups.all():
-    return render(request, 'AdminHomePage.html')
+      
   report = urllib
   if report == None:
     return render(request, 'ReportView.html', {'rep': 'no report here!'})
   else:
     return render(request, 'ReportView.html', {'rep': report})
+
 
 def logout_view(request):
    logout(request)
@@ -215,14 +228,15 @@ def login_user(request):
 """-------------Create/Manage Groups-------------------"""
 
 def newGroupPage(request):
+   if Group.objects.get(name="admin") not in request.user.groups.all():
+      return HttpResponseRedirect(reverse('Home'))
+   
    return render(request, 'createGroup.html')
    
 
 
 def createGroup(request):
-  if Group.objects.get(name="admin") in request.user.groups.all():
-    return render(request, 'AdminHomePage.html')
-
+ 
   groupname = request.POST.get('groupname')
   if not groupname:
     return HttpResponseRedirect(reverse('newGroupPage'))
@@ -237,8 +251,7 @@ def createGroup(request):
 
 
 def addUserToGroupPage(request):
-  if Group.objects.get(name="admin") in request.user.groups.all():
-    return render(request, 'AdminHomePage.html') 
+
   user = User.objects.get(username=request.user.username)   
   return render(request, 'addUserToGroup.html', {'groups_that_user_is_in': user.groups.all()})
    
@@ -247,8 +260,7 @@ def addUserToGroupPage(request):
 
 
 def addUserToGroup(request):
-  if Group.objects.get(name="admin") in request.user.groups.all():
-    return render(request, 'AdminHomePage.html')
+  
 
   username = request.POST.get('username')
   groupname = request.POST.get('groupname')
@@ -279,6 +291,8 @@ def requestgroups(request):
       list['groups'].append(g.name)
    return JsonResponse(list)
 
+
+
 def requestreports(request):
 
    list = {'reports' : []}
@@ -293,6 +307,8 @@ def requestreports(request):
                if u in request.user.groups.all():
                    list['reports'].append(g.title)
    return JsonResponse(list)
+
+
 
 def requesturls(request):
    list = {}
