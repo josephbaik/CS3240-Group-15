@@ -1,0 +1,1 @@
+web: gunicorn SecureWitness.ws --log-file -

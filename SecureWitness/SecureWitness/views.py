@@ -39,10 +39,13 @@ def reporter(request):
       
       if not request.user.username:
         return render(request, 'login.html')
+<<<<<<< HEAD
         
       if Group.objects.get(name="admin") not in request.user.groups.all() and Group.objects.get(name="reporters") not in request.user.groups.all():
         return HttpResponseRedirect(reverse('Home'))
       
+=======
+>>>>>>> 0ea21e601e5e0144e240a5ad0933d3d38606fb26
       if request.method == 'POST':
         author = str(request.user.username)
         folder = request.POST.get('folder', '')
@@ -80,13 +83,13 @@ def reporter(request):
 
       
         if incdate and not inctime:
-          report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey)
+          report = Report(title=request.POST['title'], author=author, date=str(date.today()), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey, folder=folder)
         if incdate and inctime:
-          report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey)
+          report = Report(title=request.POST['title'], author=author, date=str(date.today()), time=timestamp, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey, folder=folder)
         if not incdate and inctime:
-          report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey)
+          report = Report(title=request.POST['title'], author=author, time=str(timestamp), url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey, folder=folder)
         if not incdate and not inctime:
-          report = Report(title=request.POST['title'], author=author, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey)
+          report = Report(title=request.POST['title'], author=author, url=address, short=request.POST['shortdescription'], longd=request.POST['longdescription'], location=loc, tags=tags, reportID=idnum, enckey=enckey, folder=folder)
 
         report.save()
         report.users.add(request.user)
@@ -103,8 +106,11 @@ def reporter(request):
 def adm(request):
   if not request.user.username:
     return render(request, 'login.html')
+<<<<<<< HEAD
   
   
+=======
+>>>>>>> 0ea21e601e5e0144e240a5ad0933d3d38606fb26
   return render(request, 'invalidpermission.html')  
 
 
@@ -184,8 +190,11 @@ def shareReport(request):
     return render(request, 'share.html')
         
 def my_view(request):
+<<<<<<< HEAD
   
   
+=======
+>>>>>>> 0ea21e601e5e0144e240a5ad0933d3d38606fb26
   username = request.POST.get('username')
   password = request.POST.get('password')
   if not username or not password:
@@ -203,7 +212,10 @@ def my_view(request):
 
 
 def Reportview(request, report=None):
+<<<<<<< HEAD
       
+=======
+>>>>>>> 0ea21e601e5e0144e240a5ad0933d3d38606fb26
   report = urllib
   if report == None:
     return render(request, 'ReportView.html', {'rep': 'no report here!'})
@@ -236,7 +248,11 @@ def newGroupPage(request):
 
 
 def createGroup(request):
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 0ea21e601e5e0144e240a5ad0933d3d38606fb26
   groupname = request.POST.get('groupname')
   if not groupname:
     return HttpResponseRedirect(reverse('newGroupPage'))
@@ -251,7 +267,10 @@ def createGroup(request):
 
 
 def addUserToGroupPage(request):
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0ea21e601e5e0144e240a5ad0933d3d38606fb26
   user = User.objects.get(username=request.user.username)   
   return render(request, 'addUserToGroup.html', {'groups_that_user_is_in': user.groups.all()})
    
@@ -260,7 +279,10 @@ def addUserToGroupPage(request):
 
 
 def addUserToGroup(request):
+<<<<<<< HEAD
   
+=======
+>>>>>>> 0ea21e601e5e0144e240a5ad0933d3d38606fb26
 
   username = request.POST.get('username')
   groupname = request.POST.get('groupname')
