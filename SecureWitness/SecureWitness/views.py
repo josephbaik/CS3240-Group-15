@@ -346,12 +346,16 @@ def searchForReports(request):
 
 
 def listGroupsAndUsers(request):
-
+  if Group.objects.get(name='admin') in request.user.groups.all():
  
-   groups = request.user.groups.all()
-   a = []
-   for g in groups:
-      a += g.user_set.all()
-   return render(request, 'groupanduserlists.html', {'list_of_groups': groups, 'users': a})
+   
+   users = User.objects.all()
+
+   if request.method == 'POST':
+    baduser = str(request.POST.get('suspend'))
+    g = Group.objects.get(name='suspend')
+    g.user_set.add(baduser)
+
+   return render(request, 'groupanduserlists.html', { 'users': users})
    
 
