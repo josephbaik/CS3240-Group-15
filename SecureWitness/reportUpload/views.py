@@ -37,7 +37,7 @@ def seereport(request, report_id=None):
             print('delete button has been pressed')
         if request.POST.get('edit') == 'Edit':
             print('edit button has been pressed')
-        if author == report.author:
+        if author == report.author or Group.objects.get(name='admin') in request.user.groups.all():
             if request.POST.get('delete') == 'Delete':
                 report.delete()
                 return render(request, 'ReaderHomepage.html', {'reports': Report.objects.all(), 'username': author})
