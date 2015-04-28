@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response, HttpResponseRedirect
 from reportUpload.models import Report
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth.models import User, Group, Permission
 
 from SecureWitness import views
 

@@ -9,6 +9,12 @@ Password: <input type="password" name="password"><br>
 Confirm Password:<input type="password" name="confirmpassword"><br>
 <input type="submit" value="Register">
 </form>
+{% if badpass %} 
+<p>Passwords don't match!</p>
+{% endif %}
+{% if bademail %} 
+<p>Email is bad!</p>
+{% endif %}
 
 <a href="{% url "homepage" %}">Return</a>
 
