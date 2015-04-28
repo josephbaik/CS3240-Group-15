@@ -32,11 +32,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 def reporter(request):
-      
-      if Group.objects.get(name="suspended") in request.user.groups.all():
-        return render(request, 'Suspended.html')
+
       if not request.user.username:
         return render(request, 'login.html')
+      if Group.objects.get(name="suspended") in request.user.groups.all():
+        return render(request, 'Suspended.html')
       if request.method == 'POST':
         author = str(request.user.username)
         folder = request.POST.get('folder', '')
@@ -103,28 +103,21 @@ def adm(request):
 """Login/User Creation Process VIEWS"""
 
 def reader(request):
-
-   if Group.objects.get(name="suspended") in request.user.groups.all():
-    return render(request, 'Suspended.html')
    if not request.user.username:
     return render(request, 'login.html')
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
    reports = Report.objects.all()
    return render(request, 'ReaderHomepage.html', {'firstname': request.user.username, 'reports': reports})
 
 
 def firstscreen(request):
-   if Group.objects.get(name="suspended") in request.user.groups.all():
-       return render(request, 'Suspended.html')
    return render(request, 'login.html')
 
 def register(request):
-   if Group.objects.get(name="suspended") in request.user.groups.all():
-       return render(request, 'Suspended.html')
    return render(request, 'register.html')
 
 def addUser(request):
-   if Group.objects.get(name="suspended") in request.user.groups.all():
-       return render(request, 'Suspended.html')
    username = request.POST.get('username')
    email = request.POST.get('email')
    password = request.POST.get('password')
@@ -183,6 +176,8 @@ def my_view(request):
   if not username or not password:
     return HttpResponseRedirect(reverse('homepage'))
   user = authenticate(username = username, password = password)
+  if Group.objects.get(name="suspended") in request.user.groups.all():
+    return render(request, 'Suspended.html')
   if user is not None:
     if user.is_active:
       login(request, user)
@@ -212,6 +207,8 @@ def login_user(request):
    password=request.POST['password']
    user = authenticate(username=username, password=password)
    login(request, user)
+   if Group.objects.get(name="suspended") in request.user.groups.all():
+    logout(request)
    return render(request, 'ReaderHomepage.html', {'firstname': request.user.username})
 
 
