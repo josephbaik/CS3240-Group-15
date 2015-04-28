@@ -2,27 +2,24 @@
 {% block content %}
 <div id="section">
 <p>
-folder: {{ folder.name}}
+
 </p>
 <h2>{{firstname}}'s reports</h2>
 
 <p>
+
 {% for folder in folders %}
-{{folder}}
-{% endfor %}
-
+<b>{{folder}}</b><br>
 {% for report in reports %}
-    
-<form action='POST' >
+{% if report.folder == folder %}
 
-<a href = "{% url 'Report' report.reportID %}">{{report.title}}</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href = "{% url 'Report' report.reportID %}">{{report.title}}</a><br>
 
-    
-</form>
-
-
-
+{% endif %}
 {% endfor %}
+{% endfor %}
+
+
 
 
 {% endblock content %}
