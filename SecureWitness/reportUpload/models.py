@@ -24,7 +24,7 @@ class Report(models.Model):
         tags = models.TextField(default='')
         reportID = models.TextField(default='0000')
         enckey = models.CharField(max_length=516, default='')
-        folder = models.ForeignKey(Folder, null=True)
+        folder = models.TextField(max_length=516, default='')
         
         def get_absolute_url(self):
                 return urlresolvers.reverse('report', args=(self.title,))

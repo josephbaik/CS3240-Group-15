@@ -92,8 +92,12 @@ def seemine(request):
     author = str(request.user.username)
     if author == None:
         return render(request, 'myreports.html', {'reports': 'no report here!'})
-
-    return render(request, 'myreports.html', {'firstname': author, 'reports': Report.objects.filter(author=author)})
+    folders = []
+    reports = Report.objects.filter(author=author)
+    for rep in reports:
+        if rep.folder not in folders:
+            folders.append(rep.folder)
+    return render(request, 'myreports.html', {'firstname': author, 'folders': folders, 'reports': Report.objects.filter(author=author)})
 
 
 

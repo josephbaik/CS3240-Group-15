@@ -7,6 +7,9 @@ folder: {{ folder.name}}
 <h2>{{firstname}}'s reports</h2>
 
 <p>
+{% for folder in folders %}
+{{folder}}
+{% endfor %}
 
 {% for report in reports %}
     
@@ -20,4 +23,6 @@ folder: {{ folder.name}}
 
 
 {% endfor %}
+
+
 {% endblock content %}
