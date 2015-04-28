@@ -57,33 +57,41 @@ def editreport(request, report_id):
     if request.method == 'POST':
         print ('submit button pressed')
         title = request.POST.get('title', '')
-        if title != '':
-            report.title = title
-        location = request.POST.get('location', '')
-        if location != '':
-            report.location = location
-        longd = request.POST.get('longdescription', '')
-        if longd != '':
-            report.longd = longd
-        shortd = request.POST.get('shortdescription', '')
-        if shortd != '':
-            report.shortd = shortd
-        tags = request.POST.get('tags', '')
-        if tags != '':
-            report.tags = tags
-        enckey = request.POST.get('enckey', '')
-        if enckey != '':
-            report.enckey = enckey
-
+        move = request.POST.get('move', False)
+        if move:
+            if title != '':
+                report.title = title
+            location = request.POST.get('location', '')
+            if location != '':
+                report.location = location
+            longd = request.POST.get('longdescription', '')
+            if longd != '':
+                report.longd = longd
+            shortd = request.POST.get('shortdescription', '')
+            if shortd != '':
+                report.shortd = shortd
+            tags = request.POST.get('tags', '')
+            if tags != '':
+                report.tags = tags
+            enckey = request.POST.get('enckey', '')
+            if enckey != '':
+                report.enckey = enckey
+        
+        
         author = str(request.user.username)
         folder = request.POST.get('folder', '')
         if folder != '':
-            upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
-
+            # upload_dir = date.today().strftime(settings.UPLOAD_PATH) + '/' + author + '/' + folder
+            if move:
+                report.folder = folder
+            if not move:
+                idnum = str(len(Report.objects.all())) + str(report.author) + str(report.views)
+                newport = Report(title=report.title, views=0, author=report.author, date=report.date, time=report.time, url=report.url, short=report.short, longd=report.longd, location=report.location, tags=report.tags, enckey=report.enckey, folder=folder, reportID=idnum)
+                newport.save()
         report.save()
-        return render(request, 'ReaderHomepage.html', {'reports': Report.objects.all() , 'firstname': request.user.username})
+        return render(request, 'editreport.html', {'reports': Report.objects.all() , 'firstname': request.user.username})
     
-    return render(request, 'editReport.html', {'report': report, 'firstname':request.user.username})
+    return render(request, 'editreport.html', {'report': report, 'firstname':request.user.username})
 
 
 def seemine(request):
