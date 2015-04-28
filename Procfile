@@ -1,1 +1,1 @@
-web: gunicorn SecureWitness.ws --log-file -
+web: gunicorn SecureWitness.wsgi --log-file -
